@@ -1,14 +1,17 @@
 {
-  "name": "key.cat",
-  "description": "Key.cat webextension",
+  "name": "Key cat",
+  "description": "Key cat webextension",
   "version": null,
   "manifest_version": 2,
   "icons": {
     "48": "icons/icon_48.png",
     "128": "icons/icon_128.png"
   },
+	"permissions": [
+		"tabs"
+	],
   "browser_action": {
-    "default_title": "key.cat",
+    "default_title": "Key cat",
     "default_popup": "popup/popup.html"
   },
   "background": {

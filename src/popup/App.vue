@@ -1,19 +1,31 @@
 <template>
-  <div>
-    <p>Hello world!</p>
+  <div class='topContainer'>
+    <not-logged-in v-if="!loggedIn"></not-logged-in>
   </div>
 </template>
 
 <script>
-export default {
-  data() {
-    return {};
-  },
-};
+  import NotLoggedIn from '@/popup/components/not_logged_in'
+
+  export default {
+    data() {
+      return {}
+    },
+    components: { NotLoggedIn },
+    computed: {
+      loggedIn() {
+        return this.$store.getters['session/loggedIn']
+      }
+    }
+  }
 </script>
 
-<style lang="scss" scoped>
-p {
-  font-size: 20px;
-}
+<style lang="scss">
+  @import url('https://fonts.googleapis.com/css?family=Lato');
+  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+  @import '~bootstrap/scss/bootstrap.scss';
+
+  html, body {
+    font-family: 'Lato';
+  }
 </style>
