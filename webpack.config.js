@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -18,6 +19,9 @@ const config = {
     filename: '[name].js',
   },
   resolve: {
+    alias: {
+      '@': path.join(__dirname, 'src/')
+    },
     extensions: ['.js', '.vue'],
   },
   module: {
