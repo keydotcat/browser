@@ -1,29 +1,71 @@
 <template>
-  <div>
+  <div class='notloggedin'>
     <div v-if="checking" class='container loading d-flex justify-content-center align-items-center'>
       <i class="material-icons spinner">replay</i>
+    </div>
+    <div v-if="!checking" class='container loaded d-flex justify-content-center align-items-center'>
+      <login-form v-if="isKeyCat" :url="url"></login-form>
+      <not-key-cat v-if="!isKeyCat"></not-key-cat>
     </div>
   </div>
 </template>
 
 <script>
+  import discoverSvc from '@/services/discover'
+  import NotKeyCat from '@/popup/components/out/not_key_cat'
+  import LoginForm from '@/popup/components/out/login_form'
+
+  function getTabs(ftor){
+    if(chrome) {
+      chrome.tabs.query( {active: true, currentWindow: true}, (tabs) => {ftor(tabs)})
+    } else {
+      browser.tabs.query({active: true, currentWindow: true}).then(ftor)
+    }
+  }
+
   export default {
     name: 'not-logged-in',
+    components: {NotKeyCat, LoginForm},
     data() {
       return {
-        checking: true
+        checking: true,
+        isKeyCat: true,
+        url: '',
+        version: {
+          server: '',
+          web: ''
+        }
       }
     },
     beforeMount(){
-      browser.tabs.query({active:true,currentWindow:true}).then(function(tabs){
-        var currentTabUrl = tabs[0].url
-        console.log('csstas',currentTabUrl)
+      var self = this
+      getTabs(function(tabs){
+        if (tabs.length == 0) {
+          return
+        }
+        var urlObj = new URL(tabs[0].url)
+        self.url = urlObj.origin
+        discoverSvc.isKeyCat(self.url).then((version) => {
+          console.log('Yep', version)
+          self.checking = false
+          self.isKeyCat = true
+          self.version.server = version.server
+          self.version.web = version.web
+        }).catch((err) => {
+          console.log('Nop')
+          self.checking = false
+          self.isKeyCat = false
+        })
       })
     }
   }
 </script>
 
 <style lang="scss" scoped>
+  .loaded {
+    padding: 20px;
+  }
+
   .loading {
     width: 75px;
     height: 75px; 
