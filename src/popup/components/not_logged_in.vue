@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import discoverSvc from '@/services/discover'
+  import discoverSvc from '@/popup/services/discover'
   import NotKeyCat from '@/popup/components/out/not_key_cat'
   import LoginForm from '@/popup/components/out/login_form'
 

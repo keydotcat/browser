@@ -1,6 +1,6 @@
 {
-  "name": "Key cat",
-  "description": "Key cat webextension",
+  "name": "KeyCat",
+  "description": "KeyCat webextension",
   "version": null,
   "manifest_version": 2,
   "icons": {
@@ -8,10 +8,17 @@
     "128": "icons/icon_128.png"
   },
 	"permissions": [
-		"tabs"
+		"tabs",
+		"storage",
+		"clipboardWrite",
+		"idle",
+    "http://*/*",
+    "https://*/*",
+    "webRequest",
+    "webRequestBlocking"
 	],
   "browser_action": {
-    "default_title": "Key cat",
+    "default_title": "KeyCat",
     "default_popup": "popup/popup.html"
   },
   "background": {

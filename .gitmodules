@@ -1,0 +1,3 @@
+[submodule "src/commonjs"]
+	path = src/commonjs
+	url = git@github.com:keydotcat/commonjs.git
