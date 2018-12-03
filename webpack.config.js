@@ -1,5 +1,5 @@
 const webpack = require('webpack');
-const path = require('path')
+const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -11,7 +11,7 @@ const config = {
   mode: process.env.NODE_ENV,
   context: __dirname + '/src',
   entry: {
-    'background': './background.js',
+    background: './background.js',
     'popup/popup': './popup/popup.js',
   },
   output: {
@@ -20,7 +20,7 @@ const config = {
   },
   resolve: {
     alias: {
-      '@': path.join(__dirname, 'src/')
+      '@': path.join(__dirname, 'src/'),
     },
     extensions: ['.js', '.vue'],
   },
@@ -64,10 +64,11 @@ const config = {
     new CopyWebpackPlugin([
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
       { from: 'popup/popup.html', to: 'popup/popup.html' },
+      { from: '../node_modules/argon2-browser/dist/argon2-asm.min.js' },
       {
         from: 'manifest.json',
         to: 'manifest.json',
-        transform: (content) => {
+        transform: content => {
           const jsonContent = JSON.parse(content);
           jsonContent.version = version;
 
@@ -96,9 +97,7 @@ if (config.mode === 'production') {
 }
 
 if (process.env.HMR === 'true') {
-  config.plugins = (config.plugins || []).concat([
-    new ChromeExtensionReloader(),
-  ]);
+  config.plugins = (config.plugins || []).concat([new ChromeExtensionReloader()]);
 }
 
 module.exports = config;

@@ -38,9 +38,14 @@ const actions = {
   },
   login(context, { url, username, password }) {
     rootSvc.setUrlRoot(url + '/api');
-    return browser.runtime.sendMessage({ cmd: 'hashLogin', user: username, pass: password }).then(resp => {
-      console.log('LOOLJ', resp);
-    });
+    return browser.runtime
+      .sendMessage({ cmd: 'hashLogin', url: url, user: username, pass: password })
+      .then(resp => {
+        console.log('LOOLJ', resp);
+      })
+      .catch(err => {
+        console.log('ERRoOR', err);
+      });
     /*return workerMgr.hashPassword(username, password).then((hPass) => {
       return authSvc.login(username, hPass).then((response) => {
         //var data = { sessionData: response, password: password, csrf: response.csrf, url: url }

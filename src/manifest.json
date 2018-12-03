@@ -7,23 +7,12 @@
     "48": "icons/icon_48.png",
     "128": "icons/icon_128.png"
   },
-	"permissions": [
-		"tabs",
-		"storage",
-		"clipboardWrite",
-		"idle",
-    "http://*/*",
-    "https://*/*",
-    "webRequest",
-    "webRequestBlocking"
-	],
+  "permissions": ["tabs", "storage", "clipboardWrite", "idle", "http://*/*", "https://*/*", "webRequest", "webRequestBlocking"],
   "browser_action": {
     "default_title": "KeyCat",
     "default_popup": "popup/popup.html"
   },
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "scripts": ["background.js"]
   }
 }

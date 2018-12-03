@@ -1,19 +1,20 @@
-import axios from 'axios'
+import axios from 'axios';
 
 export default {
   isKeyCat(url) {
-    console.log('target is' + url + '/api/version')
-    return axios.get(url + '/api/version')
-      .then((response) => {
+    console.log('target is ' + url + '/api/version');
+    return axios
+      .get(url + '/api/version')
+      .then(response => {
         if (response.data.name == 'KeyCat') {
-          console.log('axion2', response.data)
-          return Promise.resolve(response.data)
+          console.log('axion2', response.data);
+          return Promise.resolve(response.data);
         } else {
-          return Promise.reject(false)
+          return Promise.reject(false);
         }
       })
-      .catch((err) => {
-        return Promise.reject(err)
-      })
-  }
-}
+      .catch(err => {
+        return Promise.reject(err);
+      });
+  },
+};

@@ -17,11 +17,11 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //process from popup (or any other bg-context)
     switch (request.cmd) {
       case 'hashLogin':
-        console.log('harsth');
-        mgr.keyMgr.hashLoginPassword(request.user, request.pass).then(p => {
-          sendResponse(p);
+        console.log('cmd login hash', request.user);
+        return mgr.keyMgr.hashLoginPassword(request.user, request.pass).then(p => {
+          console.log('response is', p, 'ars');
+          return p;
         });
-        break;
     }
   }
 });
