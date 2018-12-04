@@ -5,27 +5,29 @@
 </template>
 
 <script>
-  import NotLoggedIn from '@/popup/components/not_logged_in'
+import NotLoggedIn from '@/popup/components/not_logged_in';
+import sessionMgr from '@/background/session';
 
-  export default {
-    data() {
-      return {}
+export default {
+  data() {
+    return {};
+  },
+  components: { NotLoggedIn },
+  computed: {
+    loggedIn() {
+      return sessionMgr.loggedIn();
     },
-    components: { NotLoggedIn },
-    computed: {
-      loggedIn() {
-        return this.$store.getters['session/loggedIn']
-      }
-    }
-  }
+  },
+};
 </script>
 
 <style lang="scss">
-  @import url('https://fonts.googleapis.com/css?family=Lato');
-  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-  @import '~bootstrap/scss/bootstrap.scss';
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import '~bootstrap/scss/bootstrap.scss';
 
-  html, body {
-    font-family: 'Lato';
-  }
+html,
+body {
+  font-family: 'Lato';
+}
 </style>

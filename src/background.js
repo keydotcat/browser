@@ -1,5 +1,6 @@
 import KeyMgr from '@/commonjs/crypto/key_mgr';
 import browser from 'webextension-polyfill';
+import sessionMgr from '@/background/session';
 
 class BackgroundMgr {
   constructor() {
@@ -16,12 +17,18 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   } else {
     //process from popup (or any other bg-context)
     switch (request.cmd) {
-      case 'hashLogin':
-        console.log('cmd login hash', request.user);
-        return mgr.keyMgr.hashLoginPassword(request.user, request.pass).then(p => {
-          console.log('response is', p, 'ars');
-          return p;
-        });
+      case 'login':
+        return mgr.keyMgr
+          .hashLoginPassword(request.user, request.pass)
+          .then(p => {
+            return sessionMgr.login(request.url, request.user, p.data).then(data => {
+              //TODO: unpack keyc and store
+            });
+          })
+          .catch(err => {
+            console.log('sesserer', err);
+            return { error: err };
+          });
     }
   }
 });

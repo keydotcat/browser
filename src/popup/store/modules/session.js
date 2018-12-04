@@ -39,12 +39,12 @@ const actions = {
   login(context, { url, username, password }) {
     rootSvc.setUrlRoot(url + '/api');
     return browser.runtime
-      .sendMessage({ cmd: 'hashLogin', url: url, user: username, pass: password })
+      .sendMessage({ cmd: 'login', url: url + '/api', user: username, pass: password })
       .then(resp => {
         console.log('LOOLJ', resp);
       })
       .catch(err => {
-        console.log('ERRoOR', err);
+        console.log('ERRoOR', err, Object.keys(err));
       });
     /*return workerMgr.hashPassword(username, password).then((hPass) => {
       return authSvc.login(username, hPass).then((response) => {

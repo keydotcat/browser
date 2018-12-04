@@ -6,8 +6,7 @@ export default {
     return axios
       .get(url + '/api/version')
       .then(response => {
-        if (response.data.name == 'KeyCat') {
-          console.log('axion2', response.data);
+        if (response.data.name === 'KeyCat') {
           return Promise.resolve(response.data);
         } else {
           return Promise.reject(false);
