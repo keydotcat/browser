@@ -35,6 +35,7 @@ class RequestBase {
     return { headers: headers };
   }
   processError(httpError, prefix) {
+    debugger;
     if (!httpError.response) {
       return 'errors.network';
     }
@@ -53,9 +54,13 @@ class RequestBase {
     //switch(errResponse.status ==
     return (prefix || 'errors.') + data.error.toLowerCase().replace(new RegExp(' ', 'g'), '_');
   }
-  post(path, payload, config) {
+  post(path, payload, config = {}) {
     var merged = { ...this.getHeaders(), ...config };
     return axios.post(this.url + path, payload, merged);
+  }
+  get(path, config = {}) {
+    var merged = { ...this.getHeaders(), ...config };
+    return axios.get(this.url + path, merged);
   }
 }
 
