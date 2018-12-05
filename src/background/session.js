@@ -4,10 +4,11 @@ import browser from 'webextension-polyfill';
 const SESSION_STORE_NAME = 'kcLocalSession';
 
 class SessionMgr {
-  constructor() {
+  constructor(keyMgr) {
     this.uid = '';
+    this.keyMgr = keyMgr;
   }
-  loadFromStorage(keyMgr) {
+  loadFromStorage() {
     var self = this;
     return browser.storage.local.get(SESSION_STORE_NAME).then(data => {
       if (!(SESSION_STORE_NAME in data)) {
@@ -18,9 +19,9 @@ class SessionMgr {
       request.fromJson(sData);
       return request.get('/auth/session').then(response => {
         console.log('Got session', response);
-        return keyMgr.setKeysFromStore(sData.keys, response.data.store_token).then(ok => {
-          console.log('Got session', response);
-          this.uid = sData.uid;
+        return self.keyMgr.setKeysFromStore(sData.keys, response.data.store_token).then(ok => {
+          console.log('Got user', response);
+          self.uid = sData.uid;
         });
       });
     });
@@ -30,7 +31,7 @@ class SessionMgr {
   }
   _enableNewSession(url, data, keys) {
     console.log('Got to log-in', data, keys);
-    var sessionData = {
+    var sData = {
       sessionToken: data.session_token,
       uid: data.user_id,
       url: url,
@@ -38,16 +39,16 @@ class SessionMgr {
       keys: keys.data,
     };
     var container = {};
-    container[SESSION_STORE_NAME] = sessionData;
+    container[SESSION_STORE_NAME] = sData;
     browser.storage.local.set(container);
     request.fromJson(sData);
-    this.uid = sessionData.uid;
+    this.uid = sData.uid;
     return { data: this.uid };
   }
-  login(keyMgr, url, user, pass) {
+  login(url, user, pass) {
     request.url = url;
     var self = this;
-    return keyMgr
+    return self.keyMgr
       .hashLoginPassword(user, pass)
       .then(hPass => {
         var payload = { id: user, password: hPass.data, want_csrf: true };
@@ -58,7 +59,7 @@ class SessionMgr {
             console.log('Request ok', response);
             var srvKeys = { publicKeys: response.data.public_key, secretKeys: response.data.secret_key };
             console.log('SKFS', pass, response.data.store_token, srvKeys);
-            return keyMgr
+            return self.keyMgr
               .setKeysFromServer(pass, response.data.store_token, srvKeys)
               .then(keysRet => {
                 console.log('ALLOK', keysRet);
@@ -74,10 +75,10 @@ class SessionMgr {
             return { error: request.processError(err) };
           });
       })
-      .catch(error => {
+      .catch(err => {
         return { error: request.processError(err) };
       });
   }
 }
 
-export default new SessionMgr();
+export default SessionMgr;
