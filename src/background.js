@@ -1,24 +1,5 @@
-import KeyMgr from '@/commonjs/crypto/key_mgr';
+import mgr from '@/background/manager';
 import browser from 'webextension-polyfill';
-import SessionMgr from '@/background/session';
-import SecretsMgr from '@/background/secrets';
-import TeamsMgr from '@/background/teams';
-
-class BackgroundMgr {
-  constructor() {
-    this.keyMgr = new KeyMgr();
-    this.teams = new TeamsMgr();
-    this.session = new SessionMgr(this.keyMgr);
-    this.secrets = new SecretsMgr(this.keyMgr, this.teams);
-    this.session.loadFromStorage(this.keyMgr).then(ok => {
-      return this.teams.loadFromServer().then(ok => {
-        return this.secrets.getAll();
-      });
-    });
-  }
-}
-
-var mgr = new BackgroundMgr();
 
 browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log('Got msg', request, sender, sendResponse);

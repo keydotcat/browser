@@ -6,7 +6,7 @@
 
 <script>
 import NotLoggedIn from '@/popup/components/not_logged_in';
-import sessionMgr from '@/background/session';
+import mgr from '@/background/manager';
 
 export default {
   data() {
@@ -15,7 +15,8 @@ export default {
   components: { NotLoggedIn },
   computed: {
     loggedIn() {
-      return sessionMgr.loggedIn();
+      console.log('ISLOG', mgr.session.loggedIn());
+      return mgr.session.loggedIn();
     },
   },
 };

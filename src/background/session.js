@@ -7,13 +7,23 @@ class SessionMgr {
   constructor(keyMgr) {
     this.uid = '';
     this.keyMgr = keyMgr;
+    request.onUnauthorized(() => {
+      this.forget();
+    });
+  }
+  forget() {
+    console.log('Forgetting session');
+    this.uid = '';
+    browser.storage.local.remove(SESSION_STORE_NAME);
   }
   loadFromStorage() {
     var self = this;
     return browser.storage.local.get(SESSION_STORE_NAME).then(data => {
       if (!(SESSION_STORE_NAME in data)) {
-        return;
+        console.log('No session found');
+        return false;
       }
+      console.log('Found stored session');
       var sData = data[SESSION_STORE_NAME];
       console.log('stad', sData);
       request.fromJson(sData);
@@ -22,6 +32,7 @@ class SessionMgr {
         return self.keyMgr.setKeysFromStore(sData.keys, response.data.store_token).then(ok => {
           console.log('Got user', response);
           self.uid = sData.uid;
+          return true;
         });
       });
     });
@@ -35,7 +46,7 @@ class SessionMgr {
       sessionToken: data.session_token,
       uid: data.user_id,
       url: url,
-      csrf: data.csrf,
+      //csrf: data.csrf,
       keys: keys.data,
     };
     var container = {};
@@ -51,7 +62,7 @@ class SessionMgr {
     return self.keyMgr
       .hashLoginPassword(user, pass)
       .then(hPass => {
-        var payload = { id: user, password: hPass.data, want_csrf: true };
+        var payload = { id: user, password: hPass.data, want_csrf: false };
         console.log('Request payload', payload);
         return request
           .post('/auth/login', payload, { errorPrefix: 'login.error' })
