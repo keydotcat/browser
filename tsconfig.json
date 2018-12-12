@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "noImplicitAny": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "module": "es6",
+    "target": "ES2016",
+    "allowJs": true,
+    "sourceMap": true,
+    "types": ["jasmine"],
+    "baseUrl": ".",
+    "paths": {
+      "jslib/*": ["jslib/src/*"],
+      "@angular/*": ["node_modules/@angular/*"],
+      "node": ["node_modules/@types/node"]
+    }
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": true
+  },
+  "exclude": [
+    "node_modules",
+    "jslib/node_modules",
+    "dist",
+    "jslib/dist",
+    "jslib/spec",
+    "jslib/src/electron",
+    "jslib/src/angular/components/modal.component.ts",
+    "jslib/src/angular/dummy.module.ts",
+    "build",
+    "build.safariextension",
+    "coverage",
+    "store",
+    "src/edge",
+    "jslib/src/services/nodeApi.service.ts",
+    "jslib/src/services/lowdbStorage.service.ts"
+  ]
+}

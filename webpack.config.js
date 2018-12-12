@@ -12,7 +12,9 @@ const config = {
   context: __dirname + '/src',
   entry: {
     background: './background.js',
-    content: './content.js',
+    'content/autofill': './content/autofill.js',
+    'content/autofiller': './content/autofiller.ts',
+    'content/notificationBar': './content/notificationBar.ts',
     'popup/popup': './popup/popup.js',
   },
   output: {
@@ -23,7 +25,7 @@ const config = {
     alias: {
       '@': path.join(__dirname, 'src/'),
     },
-    extensions: ['.js', '.vue'],
+    extensions: ['.js', '.vue', '.ts'],
   },
   module: {
     rules: [
@@ -49,6 +51,11 @@ const config = {
         use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader?indentedSyntax'],
       },
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.(png|jpg|gif|svg|ico)$/,
         loader: 'file-loader',
         options: {
@@ -65,6 +72,7 @@ const config = {
     new CopyWebpackPlugin([
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
       { from: 'popup/popup.html', to: 'popup/popup.html' },
+      { from: 'content/autofill.css', to: 'content/autofill.css' },
       { from: '../node_modules/argon2-browser/dist/argon2-asm.min.js' },
       {
         from: 'manifest.json',
