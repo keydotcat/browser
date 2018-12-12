@@ -1,10 +1,22 @@
 import mgr from '@/background/manager';
 import browser from 'webextension-polyfill';
+import { BrowserApi } from '@/browser/api';
+
+function onTabMessage(request, sender, sendResponse) {
+  switch (request.command) {
+    case 'bgCollectPageDetails':
+      console.log('srta');
+      BrowserApi.tabSendMessage(sender.tab, { command: 'collectPageDetails', tab: sender.tab, sender: request.sender });
+    case 'collectPageDetailsResponse':
+      console.log('GoT  response');
+  }
+}
 
 browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   console.log('Got msg', request, sender, sendResponse);
   if (sender.tab) {
     //process from tabs
+    onTabMessage(request, sender, sendResponse);
   } else {
     //process from popup (or any other bg-context)
     switch (request.cmd) {
