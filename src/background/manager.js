@@ -1,6 +1,7 @@
 import KeyMgr from '@/commonjs/crypto/key_mgr';
 import SessionMgr from '@/background/session';
 import SecretsMgr from '@/background/secrets';
+import AutofillMgr from '@/background/autofill';
 import TeamsMgr from '@/background/teams';
 
 class BackgroundMgr {
@@ -9,6 +10,7 @@ class BackgroundMgr {
     this.teams = new TeamsMgr();
     this.session = new SessionMgr(this.keyMgr);
     this.secrets = new SecretsMgr(this.keyMgr, this.teams);
+    this.autofill = new AutofillMgr();
     this.session.loadFromStorage(this.keyMgr).then(ok => {
       if (!ok) {
         return;

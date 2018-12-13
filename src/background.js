@@ -2,13 +2,19 @@ import mgr from '@/background/manager';
 import browser from 'webextension-polyfill';
 import { BrowserApi } from '@/browser/api';
 
-function onTabMessage(request, sender, sendResponse) {
+async function onTabMessage(request, sender, sendResponse) {
   switch (request.command) {
     case 'bgCollectPageDetails':
       console.log('srta');
       BrowserApi.tabSendMessage(sender.tab, { command: 'collectPageDetails', tab: sender.tab, sender: request.sender });
+      break;
     case 'collectPageDetailsResponse':
-      console.log('GoT  response');
+      const forms = mgr.autofill.getFormsWithPasswordFields(request.details);
+      await BrowserApi.tabSendMessageData(request.tab, 'notificationBarPageDetails', {
+        details: request.details,
+        forms: forms,
+      });
+      break;
   }
 }
 
