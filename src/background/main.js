@@ -1,6 +1,7 @@
-import mgr from '@/background/manager';
-import browser from 'webextension-polyfill';
-import { BrowserApi } from '@/browser/api';
+import browser from 'webextension-polyfill'
+import { BrowserApi } from '@/browser/api'
+
+import store from '@/store'
 
 async function onTabMessage(request, sender, sendResponse) {
   switch (request.command) {
@@ -27,17 +28,8 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //process from popup (or any other bg-context)
     switch (request.cmd) {
       case 'login':
-        return mgr.session
-          .login(request.url, request.user, request.pass)
-          .then(data => {
-            //TODO: unpack keyc and store
-            console.log('login all ok', data);
-            return data;
-          })
-          .catch(err => {
-            console.log('sesserer', err);
-            return { error: err };
-          });
+        return store.dispatch('session/login',request)
+        break
     }
   }
 });

@@ -11,7 +11,7 @@ const config = {
   mode: process.env.NODE_ENV,
   context: __dirname + '/src',
   entry: {
-    background: './background.js',
+    'background/main': './background/main.js',
     'content/autofill': './content/autofill.js',
     'content/autofiller': './content/autofiller.ts',
     'content/notificationBar': './content/notificationBar.ts',

@@ -1,24 +1,17 @@
 <template>
   <div class='topContainer'>
-    <not-logged-in v-if="!loggedIn"></not-logged-in>
+    <not-logged-in v-if="!$store.getters['session/loggedIn']"></not-logged-in>
   </div>
 </template>
 
 <script>
 import NotLoggedIn from '@/popup/components/not_logged_in';
-import mgr from '@/background/manager';
 
 export default {
   data() {
     return {};
   },
   components: { NotLoggedIn },
-  computed: {
-    loggedIn() {
-      console.log('ISLOG', mgr.session.loggedIn());
-      return mgr.session.loggedIn();
-    },
-  },
 };
 </script>
 
