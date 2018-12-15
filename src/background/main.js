@@ -1,7 +1,12 @@
-import browser from 'webextension-polyfill'
-import { BrowserApi } from '@/browser/api'
+import browser from 'webextension-polyfill';
+import { BrowserApi } from '@/browser/api';
+import AutofillMgr from '@/background/autofill';
 
-import store from '@/store'
+import store from '@/store';
+
+store.dispatch('session/loadFromStorage');
+
+var autofill = new AutofillMgr();
 
 async function onTabMessage(request, sender, sendResponse) {
   switch (request.command) {
@@ -10,7 +15,7 @@ async function onTabMessage(request, sender, sendResponse) {
       BrowserApi.tabSendMessage(sender.tab, { command: 'collectPageDetails', tab: sender.tab, sender: request.sender });
       break;
     case 'collectPageDetailsResponse':
-      const forms = mgr.autofill.getFormsWithPasswordFields(request.details);
+      const forms = autofill.getFormsWithPasswordFields(request.details);
       await BrowserApi.tabSendMessageData(request.tab, 'notificationBarPageDetails', {
         details: request.details,
         forms: forms,
@@ -28,8 +33,8 @@ browser.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     //process from popup (or any other bg-context)
     switch (request.cmd) {
       case 'login':
-        return store.dispatch('session/login',request)
-        break
+        return store.dispatch('session/login', request);
+        break;
     }
   }
 });

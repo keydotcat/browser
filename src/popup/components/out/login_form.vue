@@ -15,34 +15,36 @@
 </template>
 
 <script>
+import browser from 'webextension-polyfill';
+
 export default {
   name: 'login-form',
   props: {
-    url: String
+    url: String,
   },
   data() {
     return {
       working: false,
       errMsg: '',
       uname: '',
-      pass: ''
-    }
+      pass: '',
+    };
   },
   methods: {
     submit(ev) {
-      ev.preventDefault()
-      this.working = true
-      var self = this
-      this.errMsg = ''
-      this.$store.commit('session/SESSION_SET_URL_ROOT',this.url)
-      this.$store.dispatch('session/login',{url: this.url, username: this.uname, password: this.pass}).then((ok) => {
-        console.log('Logged in')
-        self.working = false
-      }).catch((err) => {
-        console.log('Error in login')
-        this.errMsg = '' + err
-      })
-    }
-  }
-}
+      ev.preventDefault();
+      this.working = true;
+      var self = this;
+      this.errMsg = '';
+      return browser.runtime
+        .sendMessage({ cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass })
+        .then(resp => {
+          console.log('LOOLJ', resp);
+        })
+        .catch(err => {
+          console.log('ERRoOR', err, Object.keys(err));
+        });
+    },
+  },
+};
 </script>
