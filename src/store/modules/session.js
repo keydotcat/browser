@@ -11,6 +11,7 @@ const state = {
 
 const mutations = {
   [mt.SESSION_LOGIN](state, { url, data, keys }) {
+    console.log('ls', url, data, keys);
     var sData = {
       sessionToken: data.session_token,
       uid: data.user_id,
@@ -22,9 +23,11 @@ const mutations = {
     browser.storage.local.set(container);
     request.fromJson(sData);
     state.uid = sData.uid;
+    console.log('LOGDID', state.uid, ',,');
   },
   [mt.SESSION_EXISTS](state, uid) {
     state.uid = uid;
+    console.log('LOGDID', state.uid, ',,');
   },
   [mt.SESSION_LOGOUT](state) {
     state.uid = '';
@@ -41,6 +44,7 @@ const getters = {
 
 const actions = {
   loadFromStorage(context) {
+    console.log('From storage');
     return browser.storage.local.get(SESSION_STORE_NAME).then(data => {
       if (!(SESSION_STORE_NAME in data)) {
         return;
@@ -51,7 +55,7 @@ const actions = {
       request.fromJson(sData);
       return request.get('/auth/session').then(response => {
         console.log('Got session', response);
-        return keyMgr.setKeysFromStore(sData.keys, response.data.store_token).then(ok => {
+        return keyMgr.setKeysFromStore(response.data.store_token, sData.keys).then(ok => {
           console.log('Got user', response);
           context.commit(mt.SESSION_EXISTS, sData.uid);
           request.onUnauthorized(() => {
@@ -63,6 +67,7 @@ const actions = {
     });
   },
   login(context, { url, user, pass }) {
+    console.log('From login');
     request.url = url;
     return keyMgr.hashLoginPassword(user, pass).then(hPass => {
       var payload = { id: user, password: hPass.data, want_csrf: false };
