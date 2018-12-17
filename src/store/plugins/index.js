@@ -3,12 +3,14 @@
  * in a one-shot manner. There should not be any reason to edit this file.
  */
 
-const files = require.context('.', false, /\.js$/)
-const plugins = []
+import VuexWebExtensions from 'vuex-webextensions';
+
+const files = require.context('.', false, /\.js$/);
+const plugins = [VuexWebExtensions()];
 
 files.keys().forEach(key => {
-  if (key === './index.js') return
-  plugins.push(files(key).default)
-})
+  if (key === './index.js') return;
+  plugins.push(files(key).default);
+});
 
-export default plugins
+export default plugins;
