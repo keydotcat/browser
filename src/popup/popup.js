@@ -3,7 +3,7 @@ import App from './App';
 import store from '@/store';
 
 import VuexWebExtensions from 'vuex-webextensions';
-VuexWebExtensions({ persistentStates: ['kcPersistentStore'] })(store);
+VuexWebExtensions()(store);
 
 import 'jquery/dist/jquery.min.js';
 import 'bootstrap/dist/js/bootstrap.min.js';

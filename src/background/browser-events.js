@@ -26,8 +26,12 @@ export default class BrowserEventMgr {
 
   async onTabActive(tabInfo) {
     const ctab = await BrowserApi.getTabFromCurrentWindow();
-    var creds = this.store.getters['secrets/credentialsForUrl'](ctab.url);
-    this.icon.setNumberOfEntries(ctab.id, creds.length);
+    var secrets = this.store.getters['secrets/forUrl'](ctab.url);
+    var nc = 0;
+    secrets.forEach(secret => {
+      nc += secret.data.creds.length;
+    });
+    this.icon.setNumberOfEntries(ctab.id, nc);
   }
 
   onTabReplaced(tabInfo) {

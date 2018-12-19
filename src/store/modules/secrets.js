@@ -123,7 +123,7 @@ const getters = {
   allLabels: state => {
     return Object.keys(state.labels).sort();
   },
-  credentialsForUrl: state => {
+  forUrl: state => {
     return origin => {
       var oD = UrlParse.getDomain(origin);
       if (!oD) {
@@ -132,16 +132,8 @@ const getters = {
       var creds = [];
       for (var sid in state.secrets) {
         var sec = state.secrets[sid];
-        if (sec.matchDomain(oD)) {
-          sec.data.creds.forEach(cred => {
-            creds.push({
-              secret: sec.data.name,
-              name: cred.name,
-              type: cred.type,
-              username: cred.username,
-              pass: cred.password,
-            });
-          });
+        if (sec.domains.indexOf(oD) > -1) {
+          creds.push(sec);
         }
       }
       return creds;

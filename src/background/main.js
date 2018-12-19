@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill';
-import { BrowserApi } from '@/helper/browser-api';
 import BrowserEventMgr from '@/background/browser-events';
 
 import store from '@/store';

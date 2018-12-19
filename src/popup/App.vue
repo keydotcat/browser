@@ -1,17 +1,19 @@
 <template>
-  <div class='topContainer'>
+  <div class='top'>
+    <logged-in v-if="$store.getters['session/loggedIn']"></logged-in>
     <not-logged-in v-if="!$store.getters['session/loggedIn']"></not-logged-in>
   </div>
 </template>
 
 <script>
-import NotLoggedIn from '@/popup/components/not_logged_in';
+import NotLoggedIn from '@/popup/components/not-logged-in';
+import LoggedIn from '@/popup/components/logged-in';
 
 export default {
   data() {
     return {};
   },
-  components: { NotLoggedIn },
+  components: { LoggedIn, NotLoggedIn },
 };
 </script>
 
