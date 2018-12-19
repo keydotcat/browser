@@ -9,7 +9,7 @@ import IconMgr from '@/background/icon';
 var iconMgr = new IconMgr();
 iconMgr.setOffIcon();
 
-VuexWebExtensions({ persistentStates: ['kcPersistentStore'] })(store);
+VuexWebExtensions()(store);
 iconMgr.subscribeToStore(store);
 
 store.dispatch('session/loadFromStorage');
