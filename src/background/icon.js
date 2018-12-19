@@ -1,4 +1,5 @@
 import * as mt from '@/store/mutation-types';
+import browser from 'webextension-polyfill';
 
 export default class IconMgr {
   setOffIcon() {
@@ -16,7 +17,16 @@ export default class IconMgr {
         '128': `icons/icon_128${suffix}.png`,
       },
     };
-    chrome.browserAction.setIcon(options);
+    browser.browserAction.setIcon(options);
+  }
+
+  setNumberOfEntries(tabId, numCreds) {
+    browser.browserAction.setBadgeBackgroundColor({ color: '#234' });
+    var txt = '';
+    if (numCreds > 0) {
+      txt = numCreds.toString();
+    }
+    browser.browserAction.setBadgeText({ text: txt, tabId: tabId });
   }
 
   subscribeToStore(store) {
