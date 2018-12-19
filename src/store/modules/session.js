@@ -44,19 +44,14 @@ const getters = {
 
 const actions = {
   loadFromStorage(context) {
-    console.log('From storage');
     return browser.storage.local.get(SESSION_STORE_NAME).then(data => {
       if (!(SESSION_STORE_NAME in data)) {
         return;
       }
-      console.log('Found stored session');
       var sData = data[SESSION_STORE_NAME];
-      console.log('stad', sData);
       request.fromJson(sData);
       return request.get('/auth/session').then(response => {
-        console.log('Got session', response);
         return keyMgr.setKeysFromStore(response.data.store_token, sData.keys).then(ok => {
-          console.log('Got user', response);
           context.commit(mt.SESSION_EXISTS, sData.uid);
           request.onUnauthorized(() => {
             context.commit(mt.SESSION_LOGOUT);
@@ -67,15 +62,12 @@ const actions = {
     });
   },
   login(context, { url, user, pass }) {
-    console.log('From login');
     request.url = url;
     return keyMgr.hashLoginPassword(user, pass).then(hPass => {
       var payload = { id: user, password: hPass.data, want_csrf: false };
-      console.log('Request payload', payload);
       return request
         .post('/auth/login', payload, { errorPrefix: 'login.error' })
         .then(response => {
-          console.log('Request ok', response);
           var srvKeys = { publicKeys: response.data.public_key, secretKeys: response.data.secret_key };
           return keyMgr
             .setKeysFromServer(pass, response.data.store_token, srvKeys)
@@ -87,12 +79,10 @@ const actions = {
               return context.dispatch('user/loadInfo', {}, { root: true });
             })
             .catch(err => {
-              console.log('Set keys ko', err);
               return { error: err };
             });
         })
         .catch(err => {
-          console.log('Request ko', err);
           return { error: request.processError(err) };
         });
     });

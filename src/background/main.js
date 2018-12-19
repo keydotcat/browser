@@ -3,10 +3,20 @@ import { BrowserApi } from '@/browser/api';
 import AutofillMgr from '@/background/autofill';
 
 import store from '@/store';
-
-store.dispatch('session/loadFromStorage');
+import VuexWebExtensions from 'vuex-webextensions';
+import IconMgr from '@/background/icon';
 
 var autofill = new AutofillMgr();
+var iconMgr = new IconMgr();
+
+iconMgr.setOffIcon();
+
+VuexWebExtensions({ persistentStates: ['kcPersistentStore'] })(store);
+iconMgr.subscribeToStore(store);
+
+store.dispatch('session/loadFromStorage').then(res => {
+  console.log('loadFromStorage', res);
+});
 
 async function onTabMessage(request, sender, sendResponse) {
   switch (request.command) {

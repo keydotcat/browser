@@ -3,10 +3,8 @@
  * in a one-shot manner. There should not be any reason to edit this file.
  */
 
-import VuexWebExtensions from 'vuex-webextensions';
-
 const files = require.context('.', false, /\.js$/);
-const plugins = [VuexWebExtensions()];
+const plugins = [];
 
 files.keys().forEach(key => {
   if (key === './index.js') return;
