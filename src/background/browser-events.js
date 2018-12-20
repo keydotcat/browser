@@ -10,17 +10,17 @@ export default class BrowserEventMgr {
   }
 
   subscribe() {
-    browser.tabs.onActivated.addListener(() => {
-      this.onTabActive();
+    browser.tabs.onActivated.addListener(t => {
+      return this.onTabActive(t);
     });
-    browser.tabs.onReplaced.addListener(() => {
-      this.onTabReplaced();
+    browser.tabs.onReplaced.addListener(t => {
+      return this.onTabReplaced(t);
     });
-    browser.tabs.onUpdated.addListener(() => {
-      this.onTabUpdated();
+    browser.tabs.onUpdated.addListener(t => {
+      return this.onTabUpdated(t);
     });
-    browser.runtime.onMessage.addListener(() => {
-      this.onRuntimeMessage();
+    browser.runtime.onMessage.addListener((r, s, c) => {
+      return this.onRuntimeMessage(r, s, c);
     });
   }
 
@@ -57,8 +57,32 @@ export default class BrowserEventMgr {
     }
   }
 
+  async sendPopupData() {
+    var ctab = await BrowserApi.getTabFromCurrentWindow();
+    console.log('ctab', ctab);
+    var ret = {
+      loggedIn: false,
+      url: ctab.url,
+    };
+    if (!this.store.getters['session/loggedIn']) {
+      return ret;
+    }
+    ret.loggedIn = true;
+    ret.secrets = this.store.getters['secrets/forUrl'](ctab.url).map(sec => {
+      return sec.cloneAsObject();
+    });
+    console.log('Sending', ret);
+    return ret;
+  }
+
+  searchSecrets(name) {
+    return this.store.getters['secrets/filteredSecrets']('location', { search: name }).map(sec => {
+      return sec.cloneAsObject();
+    });
+  }
+
   onRuntimeMessage(request, sender, sendResponse) {
-    console.log('Got msg', request, sender, sendResponse);
+    console.log('Got msg', request, sender);
     if (sender.tab) {
       //process from tabs
       this.onTabMessage(request, sender, sendResponse);
@@ -66,8 +90,18 @@ export default class BrowserEventMgr {
       //process from popup (or any other bg-context)
       switch (request.cmd) {
         case 'login':
-          return store.dispatch('session/login', request);
-          break;
+          return this.store.dispatch('session/login', request);
+        case 'logout':
+          return new Promise(resolve => {
+            this.store.dispatch('session/logout');
+            resolve({ ok: true });
+          });
+        case 'popupOpen':
+          return this.sendPopupData();
+        case 'popupSearch':
+          return new Promise(resolve => {
+            resolve(this.searchSecrets(request.name));
+          });
       }
     }
   }

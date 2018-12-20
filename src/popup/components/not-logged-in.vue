@@ -15,22 +15,14 @@ import discoverSvc from '@/popup/services/discover';
 import NotKeyCat from '@/popup/components/out/not_key_cat';
 import LoginForm from '@/popup/components/out/login_form';
 
-function getTabs(ftor) {
-  if (chrome) {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-      ftor(tabs);
-    });
-  } else {
-    browser.tabs.query({ active: true, currentWindow: true }).then(ftor);
-  }
-}
-
 export default {
   name: 'not-logged-in',
   components: { NotKeyCat, LoginForm },
+  props: {
+    tabUrl: String,
+  },
   data() {
     return {
-      alive: true,
       checking: true,
       isKeyCat: true,
       url: '',
@@ -44,31 +36,20 @@ export default {
     this.alive = false;
   },
   beforeMount() {
-    var self = this;
-    setTimeout(() => {
-      if (!self.alive) {
-        return;
-      }
-      getTabs(function(tabs) {
-        if (tabs.length == 0) {
-          return;
-        }
-        var urlObj = new URL(tabs[0].url);
-        self.url = urlObj.origin;
-        discoverSvc
-          .isKeyCat(self.url)
-          .then(version => {
-            self.checking = false;
-            self.isKeyCat = true;
-            self.version.server = version.server;
-            self.version.web = version.web;
-          })
-          .catch(err => {
-            self.checking = false;
-            self.isKeyCat = false;
-          });
+    var urlObj = new URL(this.tabUrl);
+    this.url = urlObj.origin;
+    discoverSvc
+      .isKeyCat(this.url)
+      .then(version => {
+        this.checking = false;
+        this.isKeyCat = true;
+        this.version.server = version.server;
+        this.version.web = version.web;
+      })
+      .catch(err => {
+        this.checking = false;
+        this.isKeyCat = false;
       });
-    }, 500);
   },
 };
 </script>

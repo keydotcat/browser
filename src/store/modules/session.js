@@ -63,7 +63,7 @@ const actions = {
   },
   login(context, { url, user, pass }) {
     request.url = url;
-    return keyMgr.hashLoginPassword(user, pass).then(hPass => {
+    return keyMgr.hashPassword(user, pass).then(hPass => {
       var payload = { id: user, password: hPass.data, want_csrf: false };
       return request
         .post('/auth/login', payload, { errorPrefix: 'login.error' })
@@ -86,6 +86,9 @@ const actions = {
           return { error: request.processError(err) };
         });
     });
+  },
+  logout(context) {
+    context.commit(mt.SESSION_LOGOUT);
   },
 };
 

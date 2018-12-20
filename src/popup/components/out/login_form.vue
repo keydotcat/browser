@@ -1,6 +1,5 @@
 <template>
   <form>
-    <div class="alert alert-danger" v-if="errMsg.length > 0" role="alert">{{errMsg}}</div>
     <p>Logging in to {{url}}</p>
     <div class="form-group">
       <label for="username">Username</label>
@@ -10,7 +9,10 @@
       <label for="password">Password</label>
       <input v-model="pass" type="password" class="form-control" id="password">
     </div>
-    <button type="submit" @click="submit" class="btn btn-primary w-auto">Sign in</button>
+    <p v-if="errMsg=='errors.you_cannot_do_that'" class="alert alert-danger">Invalid creds</p>
+    <p v-if="errMsg.length > 0 && errMsg!='errors.you_cannot_do_that'" class="alert alert-danger">{{errMsg}}</p>
+    <button v-if="!working" type="submit" @click.prevent="submit" class="btn btn-primary w-auto">Sign in</button>
+    <button v-if="working" type="submit" class="btn btn-primary w-auto" disabled>Signing in...</button>
   </form>
 </template>
 
@@ -31,19 +33,17 @@ export default {
     };
   },
   methods: {
-    submit(ev) {
+    async submit(ev) {
       ev.preventDefault();
       this.working = true;
       var self = this;
       this.errMsg = '';
-      return browser.runtime
-        .sendMessage({ cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass })
-        .then(resp => {
-          console.log('LOOLJ', resp);
-        })
-        .catch(err => {
-          console.log('ERRoOR', err, Object.keys(err));
-        });
+      var resp = await browser.runtime.sendMessage({ cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass });
+      if ('error' in resp) {
+        this.errMsg = resp.error;
+        return;
+      }
+      window.close();
     },
   },
 };
