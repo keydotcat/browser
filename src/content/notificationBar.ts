@@ -220,7 +220,6 @@ document.addEventListener('DOMContentLoaded', event => {
     if (forms == null || forms.length === 0) {
       return;
     }
-    debugger;
 
     forms.forEach((f: any) => {
       const formId: string = f.form != null ? f.form.htmlID : null;

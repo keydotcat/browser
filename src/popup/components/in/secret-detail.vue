@@ -17,7 +17,7 @@
           {{cred.name}}: {{cred.username}}
         </div>
       </div>
-      <p class="text-muted m-1">URLs</p>
+      <p v-if="secret.data.urls.length > 0" class="text-muted m-1">URLs</p>
       <div class="row pl-3" v-for="url in secret.data.urls">
         <div class="col-1 text-right">
           <a class="text-muted" :href="url" target="_blank"><i class="material-icons mt-auto mb-auto">open_in_new</i> </a>

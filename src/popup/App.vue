@@ -13,6 +13,7 @@ import NotLoggedIn from '@/popup/components/not-logged-in';
 import LoggedIn from '@/popup/components/logged-in';
 import browser from 'webextension-polyfill';
 import Secret from '@/commonjs/secrets/secret';
+import tabData from '@/popup/tab-data';
 
 export default {
   data() {
@@ -20,6 +21,7 @@ export default {
       loggedIn: false,
       checking: true,
       url: '',
+      tab: {},
       secrets: [],
     };
   },
@@ -28,12 +30,14 @@ export default {
     var res = await browser.runtime.sendMessage({ cmd: 'popupOpen' });
     this.loggedIn = res.loggedIn;
     this.checking = false;
-    this.url = res.url;
+    this.url = res.tab.url;
+    this.tab = res.tab;
     if (this.loggedIn) {
       this.secrets = res.secrets.map(s => {
         return Secret.fromObject(s);
       });
     }
+    tabData.loadData(res.tab);
   },
   computed: {
     lin() {

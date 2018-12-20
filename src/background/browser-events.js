@@ -1,12 +1,14 @@
 import browser from 'webextension-polyfill';
 import AutofillMgr from '@/background/autofill';
 import { BrowserApi } from '@/helper/browser-api';
+import Tab from '@/background/tab';
 
 export default class BrowserEventMgr {
   constructor(store, iconMgr) {
     this.store = store;
     this.autofill = new AutofillMgr();
     this.icon = iconMgr;
+    this.tabs = {};
   }
 
   subscribe() {
@@ -42,15 +44,15 @@ export default class BrowserEventMgr {
     console.log('tab updated', tabInfo);
   }
 
-  async onTabMessage(request, sender, sendResponse) {
-    switch (request.command) {
+  async onTabMessage(msg, sender, sendResponse) {
+    switch (msg.command) {
       case 'bgCollectPageDetails':
-        BrowserApi.tabSendMessage(sender.tab, { command: 'collectPageDetails', tab: sender.tab, sender: request.sender });
+        BrowserApi.tabSendMessage(sender.tab, { command: 'collectPageDetails', tab: sender.tab, sender: msg.sender });
         break;
       case 'collectPageDetailsResponse':
-        const forms = this.autofill.getFormsWithPasswordFields(request.details);
-        await BrowserApi.tabSendMessageData(request.tab, 'notificationBarPageDetails', {
-          details: request.details,
+        const forms = this.autofill.getFormsWithPasswordFields(msg.details);
+        await BrowserApi.tabSendMessageData(msg.tab, 'notificationBarPageDetails', {
+          details: msg.details,
           forms: forms,
         });
         break;
@@ -59,10 +61,9 @@ export default class BrowserEventMgr {
 
   async sendPopupData() {
     var ctab = await BrowserApi.getTabFromCurrentWindow();
-    console.log('ctab', ctab);
     var ret = {
       loggedIn: false,
-      url: ctab.url,
+      tab: ctab,
     };
     if (!this.store.getters['session/loggedIn']) {
       return ret;
@@ -71,7 +72,6 @@ export default class BrowserEventMgr {
     ret.secrets = this.store.getters['secrets/forUrl'](ctab.url).map(sec => {
       return sec.cloneAsObject();
     });
-    console.log('Sending', ret);
     return ret;
   }
 
@@ -81,16 +81,16 @@ export default class BrowserEventMgr {
     });
   }
 
-  onRuntimeMessage(request, sender, sendResponse) {
-    console.log('Got msg', request, sender);
+  onRuntimeMessage(msg, sender, sendResponse) {
+    console.log('Got msg', msg, sender);
     if (sender.tab) {
       //process from tabs
-      this.onTabMessage(request, sender, sendResponse);
+      this.onTabMessage(msg, sender, sendResponse);
     } else {
       //process from popup (or any other bg-context)
-      switch (request.cmd) {
+      switch (msg.cmd) {
         case 'login':
-          return this.store.dispatch('session/login', request);
+          return this.store.dispatch('session/login', msg);
         case 'logout':
           return new Promise(resolve => {
             this.store.dispatch('session/logout');
@@ -100,7 +100,7 @@ export default class BrowserEventMgr {
           return this.sendPopupData();
         case 'popupSearch':
           return new Promise(resolve => {
-            resolve(this.searchSecrets(request.name));
+            resolve(this.searchSecrets(msg.name));
           });
       }
     }
