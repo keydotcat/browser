@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Key.cat web-extension",
   "author": "Adrià Casajús <acasajus@key.cat>",
-  "license": "MIT",
+  "license": "GPLv3",
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "precommit": "pretty-quick --staged",
