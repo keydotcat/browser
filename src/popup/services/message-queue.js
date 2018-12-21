@@ -7,8 +7,8 @@ class MessageQueue {
       return this.receiveMessage(r, s, c);
     });
   }
-  sendMessageToTab(tabId, msg) {
-    browser.tabs.sendMessage(tabId, msg);
+  sendMessageToTab(tabId, msg, opts) {
+    browser.tabs.sendMessage(tabId, msg, opts);
   }
   receiveMessage(r, s, c) {
     this.subs.forEach(cb => {
