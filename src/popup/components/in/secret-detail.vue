@@ -10,8 +10,8 @@
     <div class="pl-2" v-if="expanded">
       <p class="text-muted m-1">Credentials</p>
       <div class="row pl-3" v-for="cred in secret.data.creds">
-        <div class="col-1">
-          <i class="material-icons mt-auto mb-auto">exit_to_app</i>
+        <div class="col-1 pointme" @click="fillWithCred(cred)">
+          <i class="material-icons mt-auto mb-auto">open_in_browser</i>
         </div>
         <div class="col-11">
           {{cred.name}}: {{cred.username}}
@@ -31,6 +31,8 @@
 </template>
 
 <script>
+import tabData from '@/popup/tab-data';
+
 export default {
   name: 'secret-detail',
   props: {
@@ -38,10 +40,20 @@ export default {
     expand: Boolean,
   },
   data() {
-    console.log('Auto', this.expand);
     return {
       expanded: this.expand ? true : false,
     };
   },
+  methods: {
+    fillWithCred(cred) {
+      tabData.fillWithCred(cred);
+    },
+  },
 };
 </script>
+
+<style>
+.pointme {
+  cursor: pointer;
+}
+</style>
