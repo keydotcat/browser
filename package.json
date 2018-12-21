@@ -1,7 +1,7 @@
 {
-  "name": "key.cat",
-  "version": "1.0.0",
-  "description": "Key.cat webextension",
+  "name": "KeyCat",
+  "version": "0.0.1",
+  "description": "Key.cat web-extension",
   "author": "Adrià Casajús <acasajus@key.cat>",
   "license": "MIT",
   "scripts": {

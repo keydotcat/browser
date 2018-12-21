@@ -1,6 +1,6 @@
 {
   "name": "KeyCat",
-  "description": "KeyCat webextension",
+  "description": "KeyCat web-extension",
   "version": null,
   "manifest_version": 2,
   "icons": {
