@@ -1,6 +1,6 @@
 import browser from 'webextension-polyfill';
 
-class MessageQueue {
+class MessageBroker {
   constructor() {
     this.subs = [];
     this.waits = {};
@@ -35,4 +35,4 @@ class MessageQueue {
   }
 }
 
-export default new MessageQueue();
+export default new MessageBroker();

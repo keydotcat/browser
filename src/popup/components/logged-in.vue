@@ -26,7 +26,7 @@ import SecretList from '@/popup/components/in/secret-list';
 import SearchTab from '@/popup/components/in/search-tab';
 import Secret from '@/commonjs/secrets/secret';
 import browser from 'webextension-polyfill';
-import msgQueue from '@/popup/services/message-queue';
+import msgBroker from '@/popup/services/msg-broker';
 
 export default {
   name: 'logged-in',
@@ -48,7 +48,7 @@ export default {
       this.active = what;
     },
     logout() {
-      msgQueue.sendToRuntimeAndGet({ cmd: 'logout' }, () => {
+      msgBroker.sendToRuntimeAndGet({ cmd: 'logout' }, () => {
         window.close();
       });
     },

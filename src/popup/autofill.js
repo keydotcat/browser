@@ -1,4 +1,4 @@
-import msgQueue from '@/popup/services/message-queue';
+import msgBroker from '@/popup/services/msg-broker';
 
 class AutofillScript {
   constructor(docuuid) {
@@ -51,7 +51,7 @@ export default class Autofill {
         return;
       }
       debugger;
-      msgQueue.sendMessageToTab(
+      msgBroker.sendMessageToTab(
         this.tab.id,
         {
           command: 'fillForm',

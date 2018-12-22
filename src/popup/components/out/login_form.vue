@@ -18,7 +18,7 @@
 
 <script>
 import browser from 'webextension-polyfill';
-import msgQueue from '@/popup/services/message-queue';
+import msgBroker from '@/popup/services/msg-broker';
 
 export default {
   name: 'login-form',
@@ -40,7 +40,7 @@ export default {
       var self = this;
       this.errMsg = '';
       var request = { cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass };
-      msgQueue.sendToRuntimeAndGet(request, msg => {
+      msgBroker.sendToRuntimeAndGet(request, msg => {
         if ('error' in msg.response) {
           this.errMsg = msg.response.error;
           return;

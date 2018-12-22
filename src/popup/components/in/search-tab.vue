@@ -16,7 +16,7 @@
 import SecretList from '@/popup/components/in/secret-list';
 import browser from 'webextension-polyfill';
 import Secret from '@/commonjs/secrets/secret';
-import msgQueue from '@/popup/services/message-queue';
+import msgBroker from '@/popup/services/msg-broker';
 
 export default {
   name: 'seach-tab',
@@ -33,7 +33,7 @@ export default {
   methods: {
     doSearch() {
       console.log('rear');
-      msgQueue.sendToRuntimeAndGet({ cmd: 'popupSearch', name: this.searchName }, msg => {
+      msgBroker.sendToRuntimeAndGet({ cmd: 'popupSearch', name: this.searchName }, msg => {
         console.log('rear res', msg);
         this.secrets = msg.response.map(s => {
           return Secret.fromObject(s);

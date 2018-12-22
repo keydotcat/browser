@@ -14,7 +14,7 @@ import LoggedIn from '@/popup/components/logged-in';
 import browser from 'webextension-polyfill';
 import Secret from '@/commonjs/secrets/secret';
 import tabData from '@/popup/tab-data';
-import msgQueue from '@/popup/services/message-queue';
+import msgBroker from '@/popup/services/msg-broker';
 
 export default {
   data() {
@@ -28,7 +28,7 @@ export default {
   },
   components: { LoggedIn, NotLoggedIn },
   beforeMount() {
-    msgQueue.sendToRuntimeAndGet({ cmd: 'popupOpen' }, msg => {
+    msgBroker.sendToRuntimeAndGet({ cmd: 'popupOpen' }, msg => {
       this.loggedIn = msg.response.loggedIn;
       this.checking = false;
       this.url = msg.response.tab.url;
