@@ -3,6 +3,7 @@ import browser from 'webextension-polyfill';
 class MessageQueue {
   constructor() {
     this.subs = [];
+    this.waits = {};
     browser.runtime.onMessage.addListener((r, s, c) => {
       return this.receiveMessage(r, s, c);
     });
@@ -10,22 +11,26 @@ class MessageQueue {
   sendMessageToTab(tabId, msg, opts) {
     browser.tabs.sendMessage(tabId, msg, opts);
   }
-  receiveMessage(r, s, c) {
-    console.log('received message', r, s, c);
+  receiveMessage(msg, sender, c) {
     this.subs.forEach(cb => {
-      cb(r, s, c);
+      cb(msg, sender, c);
     });
+    if (msg.cmd in this.waits) {
+      for (var i = 0; i < this.waits[msg.cmd].length; i++) {
+        this.waits[msg.cmd][i](msg, sender);
+      }
+      this.waits[msg.cmd] = [];
+    }
   }
   subscribe(cb) {
     this.subs.push(cb);
   }
   sendToRuntimeAndGet(msg, ftor) {
-    this.subscribe(respMsg => {
-      if (respMsg.cmd != msg.cmd + 'Response') {
-        return;
-      }
-      ftor(respMsg.response);
-    });
+    var cmdKey = msg.cmd + 'Response';
+    if (!(cmdKey in this.waits)) {
+      this.waits[cmdKey] = [];
+    }
+    this.waits[cmdKey].push(ftor);
     browser.runtime.sendMessage(msg);
   }
 }

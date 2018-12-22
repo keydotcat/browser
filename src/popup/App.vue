@@ -28,17 +28,17 @@ export default {
   },
   components: { LoggedIn, NotLoggedIn },
   beforeMount() {
-    msgQueue.sendToRuntimeAndGet({ cmd: 'popupOpen' }, res => {
-      this.loggedIn = res.loggedIn;
+    msgQueue.sendToRuntimeAndGet({ cmd: 'popupOpen' }, msg => {
+      this.loggedIn = msg.response.loggedIn;
       this.checking = false;
-      this.url = res.tab.url;
-      this.tab = res.tab;
+      this.url = msg.response.tab.url;
+      this.tab = msg.response.tab;
       if (this.loggedIn) {
-        this.secrets = res.secrets.map(s => {
+        this.secrets = msg.response.secrets.map(s => {
           return Secret.fromObject(s);
         });
       }
-      tabData.loadData(res.tab);
+      tabData.loadData(msg.response.tab);
     });
   },
   computed: {

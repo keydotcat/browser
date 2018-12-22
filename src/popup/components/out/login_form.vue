@@ -40,9 +40,9 @@ export default {
       var self = this;
       this.errMsg = '';
       var request = { cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass };
-      msgQueue.sendToRuntimeAndGet(request, resp => {
-        if ('error' in resp) {
-          this.errMsg = resp.error;
+      msgQueue.sendToRuntimeAndGet(request, msg => {
+        if ('error' in msg.response) {
+          this.errMsg = msg.response.error;
           return;
         }
         window.close();

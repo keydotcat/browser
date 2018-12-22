@@ -32,8 +32,10 @@ export default {
   },
   methods: {
     doSearch() {
-      msgQueue.sendToRuntimeAndGet({ cmd: 'popupSearch' }, response => {
-        this.secrets = response.map(s => {
+      console.log('rear');
+      msgQueue.sendToRuntimeAndGet({ cmd: 'popupSearch', name: this.searchName }, msg => {
+        console.log('rear res', msg);
+        this.secrets = msg.response.map(s => {
           return Secret.fromObject(s);
         });
       });
