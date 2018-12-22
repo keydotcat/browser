@@ -14,6 +14,7 @@ import LoggedIn from '@/popup/components/logged-in';
 import browser from 'webextension-polyfill';
 import Secret from '@/commonjs/secrets/secret';
 import tabData from '@/popup/tab-data';
+import msgQueue from '@/popup/services/message-queue';
 
 export default {
   data() {
@@ -26,18 +27,19 @@ export default {
     };
   },
   components: { LoggedIn, NotLoggedIn },
-  async beforeMount() {
-    var res = await browser.runtime.sendMessage({ cmd: 'popupOpen' });
-    this.loggedIn = res.loggedIn;
-    this.checking = false;
-    this.url = res.tab.url;
-    this.tab = res.tab;
-    if (this.loggedIn) {
-      this.secrets = res.secrets.map(s => {
-        return Secret.fromObject(s);
-      });
-    }
-    tabData.loadData(res.tab);
+  beforeMount() {
+    msgQueue.sendToRuntimeAndGet({ cmd: 'popupOpen' }, res => {
+      this.loggedIn = res.loggedIn;
+      this.checking = false;
+      this.url = res.tab.url;
+      this.tab = res.tab;
+      if (this.loggedIn) {
+        this.secrets = res.secrets.map(s => {
+          return Secret.fromObject(s);
+        });
+      }
+      tabData.loadData(res.tab);
+    });
   },
   computed: {
     lin() {

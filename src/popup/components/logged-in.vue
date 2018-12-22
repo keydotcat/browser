@@ -26,6 +26,7 @@ import SecretList from '@/popup/components/in/secret-list';
 import SearchTab from '@/popup/components/in/search-tab';
 import Secret from '@/commonjs/secrets/secret';
 import browser from 'webextension-polyfill';
+import msgQueue from '@/popup/services/message-queue';
 
 export default {
   name: 'logged-in',
@@ -46,11 +47,10 @@ export default {
     setActive(what) {
       this.active = what;
     },
-    async logout() {
-      var res = browser.runtime.sendMessage({ cmd: 'logout' });
-      if (res) {
+    logout() {
+      msgQueue.sendToRuntimeAndGet({ cmd: 'logout' }, () => {
         window.close();
-      }
+      });
     },
   },
   computed: {

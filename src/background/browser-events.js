@@ -13,20 +13,20 @@ export default class BrowserEventMgr {
 
   subscribe() {
     browser.tabs.onActivated.addListener(t => {
-      return this.onTabActive(t);
+      return this.tabUpdateIcon(t);
     });
     browser.tabs.onReplaced.addListener(t => {
-      return this.onTabReplaced(t);
+      return this.tabUpdateIcon(t);
     });
     browser.tabs.onUpdated.addListener(t => {
-      return this.onTabUpdated(t);
+      return this.tabUpdateIcon(t);
     });
     browser.runtime.onMessage.addListener((r, s, c) => {
       return this.onRuntimeMessage(r, s, c);
     });
   }
 
-  async onTabActive(tabInfo) {
+  async tabUpdateIcon(tabInfo) {
     const ctab = await BrowserApi.getTabFromCurrentWindow();
     var secrets = this.store.getters['secrets/forUrl'](ctab.url);
     var nc = 0;
@@ -34,14 +34,6 @@ export default class BrowserEventMgr {
       nc += secret.data.creds.length;
     });
     this.icon.setNumberOfEntries(ctab.id, nc);
-  }
-
-  onTabReplaced(tabInfo) {
-    console.log('tab repla', tabInfo);
-  }
-
-  onTabUpdated(tabInfo) {
-    console.log('tab updated', tabInfo);
   }
 
   async onTabMessage(msg, sender, sendResponse) {
@@ -81,6 +73,11 @@ export default class BrowserEventMgr {
     });
   }
 
+  async runtimeRespond(msg, sender, ftor) {
+    var resp = await Promise.resolve(ftor());
+    browser.runtime.sendMessage({ cmd: msg.cmd + 'Response', response: resp });
+  }
+
   onRuntimeMessage(msg, sender, sendResponse) {
     console.log('Got msg', msg, sender);
     if (sender.tab) {
@@ -90,18 +87,26 @@ export default class BrowserEventMgr {
       //process from popup (or any other bg-context)
       switch (msg.cmd) {
         case 'login':
-          return this.store.dispatch('session/login', msg);
+          this.runtimeRespond(msg, sender, () => {
+            return this.store.dispatch('session/login', msg);
+          });
+          break;
         case 'logout':
-          return new Promise(resolve => {
+          this.runtimeRespond(msg, sender, () => {
             this.store.dispatch('session/logout');
-            resolve({ ok: true });
+            return { ok: true };
           });
+          break;
         case 'popupOpen':
-          return this.sendPopupData();
-        case 'popupSearch':
-          return new Promise(resolve => {
-            resolve(this.searchSecrets(msg.name));
+          this.runtimeRespond(msg, sender, () => {
+            return this.sendPopupData();
           });
+          break;
+        case 'popupSearch':
+          this.runtimeRespond(msg, sender, () => {
+            return this.searchSecrets(msg.name);
+          });
+          break;
       }
     }
   }

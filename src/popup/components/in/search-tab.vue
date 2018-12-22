@@ -16,6 +16,7 @@
 import SecretList from '@/popup/components/in/secret-list';
 import browser from 'webextension-polyfill';
 import Secret from '@/commonjs/secrets/secret';
+import msgQueue from '@/popup/services/message-queue';
 
 export default {
   name: 'seach-tab',
@@ -30,10 +31,11 @@ export default {
     this.doSearch();
   },
   methods: {
-    async doSearch() {
-      var res = await browser.runtime.sendMessage({ cmd: 'popupSearch', name: this.searchName });
-      this.secrets = res.map(s => {
-        return Secret.fromObject(s);
+    doSearch() {
+      msgQueue.sendToRuntimeAndGet({ cmd: 'popupSearch' }, response => {
+        this.secrets = response.map(s => {
+          return Secret.fromObject(s);
+        });
       });
     },
   },

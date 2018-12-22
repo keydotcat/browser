@@ -18,6 +18,7 @@
 
 <script>
 import browser from 'webextension-polyfill';
+import msgQueue from '@/popup/services/message-queue';
 
 export default {
   name: 'login-form',
@@ -33,17 +34,19 @@ export default {
     };
   },
   methods: {
-    async submit(ev) {
+    submit(ev) {
       ev.preventDefault();
       this.working = true;
       var self = this;
       this.errMsg = '';
-      var resp = await browser.runtime.sendMessage({ cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass });
-      if ('error' in resp) {
-        this.errMsg = resp.error;
-        return;
-      }
-      window.close();
+      var request = { cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass };
+      msgQueue.sendToRuntimeAndGet(request, resp => {
+        if ('error' in resp) {
+          this.errMsg = resp.error;
+          return;
+        }
+        window.close();
+      });
     },
   },
 };
