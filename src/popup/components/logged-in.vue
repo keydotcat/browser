@@ -57,7 +57,6 @@ export default {
     numberOfTabCredentials() {
       var nc = 0;
       this.tabSecrets.forEach(sec => {
-        console.log(sec);
         nc += sec.data._data.creds.length;
       });
       return nc;

@@ -79,7 +79,6 @@ export default class BrowserEventMgr {
   }
 
   onRuntimeMessage(msg, sender, sendResponse) {
-    console.log('Got msg', msg, sender);
     if (sender.tab) {
       //process from tabs
       this.onTabMessage(msg, sender, sendResponse);

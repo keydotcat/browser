@@ -2,7 +2,6 @@ import axios from 'axios';
 
 export default {
   isKeyCat(url) {
-    console.log('target is ' + url + '/api/version');
     return axios
       .get(url + '/api/version')
       .then(response => {

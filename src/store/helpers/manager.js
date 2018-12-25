@@ -34,7 +34,6 @@ class Manager {
         task.cmd = cmd;
         self.worker.postMessage(task);
       } catch (e) {
-        console.log('ERROR', e);
         toastSvc.error('Worker error ' + e);
       }
     });

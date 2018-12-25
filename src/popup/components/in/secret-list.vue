@@ -20,7 +20,6 @@ export default {
     expand: Boolean,
   },
   data() {
-    console.log('EXC', this.expand);
     return {};
   },
 };

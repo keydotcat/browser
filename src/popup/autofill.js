@@ -42,7 +42,6 @@ export default class Autofill {
       return false;
     }
     this.pageDetails.forEach(pd => {
-      console.log('details', pd);
       if (pd.tab.id !== this.tab.id || pd.tab.url !== this.tab.url) {
         return;
       }

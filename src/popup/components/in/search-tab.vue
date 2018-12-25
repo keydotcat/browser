@@ -32,9 +32,7 @@ export default {
   },
   methods: {
     doSearch() {
-      console.log('rear');
       msgBroker.sendToRuntimeAndGet({ cmd: 'popupSearch', name: this.searchName }, msg => {
-        console.log('rear res', msg);
         this.secrets = msg.response.map(s => {
           return Secret.fromObject(s);
         });

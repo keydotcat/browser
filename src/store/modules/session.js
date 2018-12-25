@@ -11,7 +11,6 @@ const state = {
 
 const mutations = {
   [mt.SESSION_LOGIN](state, { url, data, keys }) {
-    console.log('ls', url, data, keys);
     var sData = {
       sessionToken: data.session_token,
       uid: data.user_id,
@@ -23,11 +22,9 @@ const mutations = {
     browser.storage.local.set(container);
     request.fromJson(sData);
     state.uid = sData.uid;
-    console.log('LOGDID', state.uid, ',,');
   },
   [mt.SESSION_EXISTS](state, uid) {
     state.uid = uid;
-    console.log('LOGDID', state.uid, ',,');
   },
   [mt.SESSION_LOGOUT](state) {
     state.uid = '';
@@ -37,7 +34,6 @@ const mutations = {
 
 const getters = {
   loggedIn: state => {
-    console.log('LOGDID', state.uid, ',,');
     return state.uid.length > 0;
   },
 };
