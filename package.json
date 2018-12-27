@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "description": "Key.cat web-extension",
   "author": "Adrià Casajús <acasajus@key.cat>",
-  "license": "GPLv3",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "lint": "eslint --ext .js,.vue src",
     "precommit": "pretty-quick --staged",
@@ -23,6 +23,7 @@
     "axios": "^0.18.0",
     "bootstrap": "^4.1.3",
     "eslint-plugin-html": "^5.0.0",
+    "event-source-polyfill": "^1.0.5",
     "jquery": "^3.3.1",
     "luxon": "^1.3.2",
     "popper.js": "^1.14.4",

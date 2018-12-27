@@ -2,6 +2,7 @@ import * as mt from '@/store/mutation-types';
 import browser from 'webextension-polyfill';
 import request from '@/store/services/request';
 import keyMgr from '@/store/helpers/keymgr';
+import eventSync from '@/store/services/eventsync';
 
 const SESSION_STORE_NAME = 'kcSession';
 
@@ -22,9 +23,12 @@ const mutations = {
     browser.storage.local.set(container);
     request.fromJson(sData);
     state.uid = sData.uid;
+    eventSync.connect();
   },
   [mt.SESSION_EXISTS](state, uid) {
     state.uid = uid;
+    console.log('sync', eventSync);
+    eventSync.connect();
   },
   [mt.SESSION_LOGOUT](state) {
     state.uid = '';
