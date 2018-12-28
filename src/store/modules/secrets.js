@@ -242,6 +242,15 @@ const actions = {
       context.commit(mt.SECRET_UNSET, { teamId: teamId, vaultId: vaultId, secretId: secretId });
     });
   },
+  setFromServer(context, { teamId, vaultId, secret }) {
+    var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId);
+    keyMgr.openAndDeserialize(vKeys, secret.data).then(opened => {
+      context.commit(mt.SECRET_SET, { teamId: teamId, secret: secret, openData: opened });
+    });
+  },
+  deleteFromServer(context, { teamId, vaultId, secretId }) {
+    context.commit(mt.SECRET_UNSET, { teamId: teamId, vaultId: vaultId, secretId: secretId });
+  },
 };
 
 export default {

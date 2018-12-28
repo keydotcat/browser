@@ -36,7 +36,7 @@ class RequestBase {
     if (this.csrf) {
       headers['X-Csrf-Token'] = this.csrf;
     }
-    return { headers: headers, withCredentials: true };
+    return { headers: headers };
   }
   processError(httpError, prefix) {
     if (!httpError.response) {
