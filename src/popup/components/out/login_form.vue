@@ -41,6 +41,7 @@ export default {
       this.errMsg = '';
       var request = { cmd: 'login', url: this.url + '/api', user: this.uname, pass: this.pass };
       msgBroker.sendToRuntimeAndGet(request, msg => {
+        this.working = false;
         if ('error' in msg.response) {
           this.errMsg = msg.response.error;
           return;
