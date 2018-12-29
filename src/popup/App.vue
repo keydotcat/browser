@@ -1,55 +1,65 @@
 <template>
-  <div class='top'>
-    <logged-in :tabSecrets="secrets" v-if="lin"></logged-in>
-    <not-logged-in :tabUrl="this.url" v-if="lout"></not-logged-in>
-    <div v-if="checking" class='container loading d-flex justify-content-center align-items-center'>
-      <i class="material-icons spinner">replay</i>
+  <div class="top">
+    <LoggedIn
+      v-if="lin"
+      :tab-secrets="secrets"
+    />
+    <NotLoggedIn
+      v-if="lout"
+      :tab-url="url"
+    />
+    <div
+      v-if="checking"
+      class="container loading d-flex justify-content-center align-items-center"
+    >
+      <i class="material-icons spinner">
+        replay
+      </i>
     </div>
   </div>
 </template>
 
 <script>
-import NotLoggedIn from '@/popup/components/not-logged-in';
-import LoggedIn from '@/popup/components/logged-in';
-import browser from 'webextension-polyfill';
-import Secret from '@/commonjs/secrets/secret';
-import tabData from '@/popup/tab-data';
-import msgBroker from '@/popup/services/msg-broker';
+import NotLoggedIn from '@/popup/components/not-logged-in'
+import LoggedIn from '@/popup/components/logged-in'
+import Secret from '@/commonjs/secrets/secret'
+import tabData from '@/popup/tab-data'
+import msgBroker from '@/popup/services/msg-broker'
 
 export default {
+  components: { LoggedIn, NotLoggedIn },
   data() {
     return {
       loggedIn: false,
       checking: true,
       url: '',
       tab: {},
-      secrets: [],
-    };
-  },
-  components: { LoggedIn, NotLoggedIn },
-  beforeMount() {
-    msgBroker.sendToRuntimeAndGet({ cmd: 'popupOpen' }, msg => {
-      this.loggedIn = msg.response.loggedIn;
-      this.checking = false;
-      this.url = msg.response.tab.url;
-      this.tab = msg.response.tab;
-      if (this.loggedIn) {
-        this.secrets = msg.response.secrets.map(s => {
-          return Secret.fromObject(s);
-        });
-      }
-      tabData.loadData(msg.response.tab);
-    });
+      secrets: []
+    }
   },
   computed: {
     lin() {
-      return this.loggedIn && !this.checking;
+      return this.loggedIn && !this.checking
     },
     lout() {
-      return !this.loggedIn && !this.checking;
-    },
+      return !this.loggedIn && !this.checking
+    }
   },
-};
+  beforeMount() {
+    msgBroker.sendToRuntimeAndGet({ cmd: 'popupOpen' }, msg => {
+      this.loggedIn = msg.response.loggedIn
+      this.checking = false
+      this.url = msg.response.tab.url
+      this.tab = msg.response.tab
+      if (this.loggedIn) {
+        this.secrets = msg.response.secrets.map(s => {
+          return Secret.fromObject(s)
+        })
+      }
+      tabData.loadData(msg.response.tab)
+    })
+  }
+}
 </script>
 
 <style lang="scss">

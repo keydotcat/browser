@@ -1,4 +1,3 @@
-
 class ToastMgr {
   constructor() {
     this.okcb = this.noop

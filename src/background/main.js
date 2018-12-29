@@ -1,17 +1,16 @@
-import browser from 'webextension-polyfill';
-import BrowserEventMgr from '@/background/browser-events';
+import BrowserEventMgr from '@/background/browser-events'
 
-import store from '@/store';
-import VuexWebExtensions from 'vuex-webextensions';
-import IconMgr from '@/background/icon';
+import store from '@/store'
+import VuexWebExtensions from 'vuex-webextensions'
+import IconMgr from '@/background/icon'
 
-var iconMgr = new IconMgr();
-iconMgr.setOffIcon();
+var iconMgr = new IconMgr()
+iconMgr.setOffIcon()
 
-VuexWebExtensions()(store);
-iconMgr.subscribeToStore(store);
+VuexWebExtensions()(store)
+iconMgr.subscribeToStore(store)
 
-store.dispatch('session/loadFromStorage');
+store.dispatch('session/loadFromStorage')
 
-var browserEvents = new BrowserEventMgr(store, iconMgr);
-browserEvents.subscribe();
+var browserEvents = new BrowserEventMgr(store, iconMgr)
+browserEvents.subscribe()

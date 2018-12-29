@@ -2,42 +2,43 @@
   <div>
     <div class="p-1">
       <div class="input-group mb-1">
-        <input type="text" v-model="searchName" @keyup="doSearch" class="form-control" placeholder="Search">
+        <input v-model="searchName" type="text" class="form-control" placeholder="Search" @keyup="doSearch"/>
         <div class="input-group-append">
-          <i class="material-icons input-group-text">search</i>
+          <i class="material-icons input-group-text">
+            search
+          </i>
         </div>
       </div>
     </div>
-    <secret-list :expand="false" :secrets="secrets"></secret-list>
+    <SecretList :expand="false" :secrets="secrets"/>
   </div>
 </template>
 
 <script>
-import SecretList from '@/popup/components/in/secret-list';
-import browser from 'webextension-polyfill';
-import Secret from '@/commonjs/secrets/secret';
-import msgBroker from '@/popup/services/msg-broker';
+import SecretList from '@/popup/components/in/secret-list'
+import Secret from '@/commonjs/secrets/secret'
+import msgBroker from '@/popup/services/msg-broker'
 
 export default {
-  name: 'seach-tab',
+  name: 'SeachTab',
   components: { SecretList },
   data() {
     return {
       searchName: '',
-      secrets: [],
-    };
+      secrets: []
+    }
   },
   beforeMount() {
-    this.doSearch();
+    this.doSearch()
   },
   methods: {
     doSearch() {
       msgBroker.sendToRuntimeAndGet({ cmd: 'popupSearch', name: this.searchName }, msg => {
         this.secrets = msg.response.map(s => {
-          return Secret.fromObject(s);
-        });
-      });
-    },
-  },
-};
+          return Secret.fromObject(s)
+        })
+      })
+    }
+  }
+}
 </script>

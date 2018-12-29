@@ -1,16 +1,16 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
   parserOptions: {
-    sourceType: 'module',
+    parser: 'babel-eslint',
+    sourceType: 'module'
   },
   env: {
     browser: true,
-    node: true,
+    node: true
   },
-  extends: 'standard',
+  extends: ['standard', 'plugin:vue/base', 'plugin:prettier/recommended'],
   globals: {
-    __static: true,
+    __static: true
   },
   plugins: ['html'],
   rules: {
@@ -25,6 +25,6 @@ module.exports = {
     'keyword-spacing': 0,
     'space-before-blocks': 0,
     'space-in-parens': 0,
-    'spaced-comment': ['error', 'never'],
-  },
-};
+    'spaced-comment': 0
+  }
+}

@@ -6,10 +6,10 @@ class ModuleLoader {
     this.store = store
     this.teams = {}
   }
-  syncTeams(teams){
-    for(var i = 0; i < teams.length; i++) {
+  syncTeams(teams) {
+    for (var i = 0; i < teams.length; i++) {
       var tid = teams[i].id
-      if(tid in this.teams) {
+      if (tid in this.teams) {
         continue
       }
       var mid = 'team.' + tid
@@ -18,8 +18,8 @@ class ModuleLoader {
       this.store.dispatch(`${mid}/loadInfo`, tid)
     }
   }
-  logout(){
-    for(var tid in this.teams) {
+  logout() {
+    for (var tid in this.teams) {
       var mid = 'team.' + tid
       this.store.unregisterModule(mid)
     }
