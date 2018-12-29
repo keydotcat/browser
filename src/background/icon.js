@@ -1,4 +1,4 @@
-import * as mt from '@/store/mutation-types'
+import * as mt from '@/commonjs/store/mutation-types'
 import browser from 'webextension-polyfill'
 
 export default class IconMgr {
