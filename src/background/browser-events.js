@@ -1,6 +1,8 @@
 import browser from 'webextension-polyfill'
 import AutofillMgr from '@/background/autofill'
 import { BrowserApi } from '@/helper/browser-api'
+import UrlParse from '@/commonjs/helpers/urlparse'
+import NotificationQueue from '@/background/notification-queue'
 
 export default class BrowserEventMgr {
   constructor(store, iconMgr) {
@@ -8,25 +10,39 @@ export default class BrowserEventMgr {
     this.autofill = new AutofillMgr()
     this.icon = iconMgr
     this.tabs = {}
+    this.nots = new NotificationQueue()
   }
 
   subscribe() {
+    browser.tabs.onCreated.addListener(t => {
+      return this.tabInit(t)
+    })
     browser.tabs.onActivated.addListener(t => {
-      return this.tabUpdateIcon(t)
+      return this.tabInit(t)
     })
     browser.tabs.onReplaced.addListener(t => {
-      return this.tabUpdateIcon(t)
+      return this.tabInit(t)
     })
     browser.tabs.onUpdated.addListener(t => {
-      return this.tabUpdateIcon(t)
+      return this.tabInit(t)
     })
     browser.runtime.onMessage.addListener((r, s, c) => {
       return this.onRuntimeMessage(r, s, c)
     })
   }
 
+  tabInit(tabInfo) {
+    window.setTimeout(() => {
+      this.nots.check()
+      this.tabUpdateIcon(tabInfo)
+    }, 1000)
+  }
+
   async tabUpdateIcon(tabInfo) {
     const ctab = await BrowserApi.getTabFromCurrentWindow()
+    if (ctab == null || ctab.url == null) {
+      return
+    }
     var secrets = this.store.getters['secrets/forUrl'](ctab.url)
     var nc = 0
     secrets.forEach(secret => {
@@ -47,6 +63,42 @@ export default class BrowserEventMgr {
           forms: forms
         })
         break
+      case 'bgAddLogin':
+        this.addLogin(msg.login, sender.tab)
+        break
+    }
+  }
+
+  addLogin(login, tab) {
+    var tabDomain = UrlParse.getDomain(login.url)
+    if (!tabDomain || tabDomain.length == 0) {
+      return
+    }
+    console.log('abDomain', tabDomain)
+    var secrets = this.store.getters['secrets/forUrl'](tabDomain)
+    var usermatch = secrets.filter(secret => {
+      console.log('sercer', secret)
+      return secret.creds.filter(cred => {
+        return cred.username == login.username
+      })
+    })
+    console.log(usermatch, usermatch.length)
+    if (usermatch.length > 0) {
+      //Replace
+      console.log('TODO login replace!')
+    } else {
+      console.log('Login add!')
+      this.nots.removeTab(tab)
+      this.nots.add({
+        type: 'addLogin',
+        username: login.username,
+        password: login.password,
+        domain: tabDomain,
+        uri: login.url,
+        tabId: tab.id,
+        expires: new Date(new Date().getTime() + 30 * 60000) // 30 minutes
+      })
+      this.nots.check(tab)
     }
   }
 
@@ -78,6 +130,7 @@ export default class BrowserEventMgr {
   }
 
   onRuntimeMessage(msg, sender, sendResponse) {
+    console.log('Got mesg', msg)
     if (sender.tab) {
       //process from tabs
       this.onTabMessage(msg, sender, sendResponse)

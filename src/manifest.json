@@ -29,6 +29,7 @@
       "run_at": "document_end"
     }
   ],
+  "web_accessible_resources": ["notification/bar.html"],
   "browser_specific_settings": {
     "gecko": {
       "id": "{fdd2f6f0-0ea5-4abe-8ba9-26cff6dcbf99}"
