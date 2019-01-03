@@ -53,7 +53,7 @@ export default class Autofill {
       msgBroker.sendMessageToTab(
         this.tab.id,
         {
-          command: 'fillForm',
+          cmd: 'fillForm',
           fillScript: fillScript,
           url: this.tab.url
         },

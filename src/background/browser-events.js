@@ -52,9 +52,9 @@ export default class BrowserEventMgr {
   }
 
   async onTabMessage(msg, sender, sendResponse) {
-    switch (msg.command) {
+    switch (msg.cmd) {
       case 'bgCollectPageDetails':
-        BrowserApi.tabSendMessage(sender.tab, { command: 'collectPageDetails', tab: sender.tab, sender: msg.sender })
+        BrowserApi.tabSendMessage(sender.tab, { cmd: 'collectPageDetails', tab: sender.tab, sender: msg.sender })
         break
       case 'collectPageDetailsResponse':
         const forms = this.autofill.getFormsWithPasswordFields(msg.details)
@@ -63,31 +63,34 @@ export default class BrowserEventMgr {
           forms: forms
         })
         break
+      case 'bgGetVaults':
+        await BrowserApi.tabSendMessageData(sender.tab, 'bgGetVaultsResponse', this.store.getters['user/allVaults'])
+        break
       case 'bgAddLogin':
         this.addLogin(msg.login, sender.tab)
         break
+      case 'bgAddLoginYes':
+        this.addLoginYes(sender.tab)
     }
   }
+
+  addLoginYes(tab) {}
 
   addLogin(login, tab) {
     var tabDomain = UrlParse.getDomain(login.url)
     if (!tabDomain || tabDomain.length == 0) {
       return
     }
-    console.log('abDomain', tabDomain)
     var secrets = this.store.getters['secrets/forUrl'](tabDomain)
     var usermatch = secrets.filter(secret => {
-      console.log('sercer', secret)
       return secret.creds.filter(cred => {
         return cred.username == login.username
       })
     })
-    console.log(usermatch, usermatch.length)
     if (usermatch.length > 0) {
       //Replace
       console.log('TODO login replace!')
     } else {
-      console.log('Login add!')
       this.nots.removeTab(tab)
       this.nots.add({
         type: 'addLogin',

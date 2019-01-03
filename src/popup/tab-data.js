@@ -9,13 +9,13 @@ class TabData {
       this.receiveMessage(msg, sender)
     })
     await msgBroker.sendMessageToTab(tab.id, {
-      command: 'collectPageDetails',
+      cmd: 'collectPageDetails',
       tab: tab,
       sender: 'TabPopup'
     })
   }
   receiveMessage(msg, sender) {
-    switch (msg.command) {
+    switch (msg.cmd) {
       case 'collectPageDetailsResponse':
         this.pageDetails.push({
           frameId: sender.frameId,

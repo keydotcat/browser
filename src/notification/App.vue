@@ -1,34 +1,46 @@
 <template>
-  <div>
-    hello
-  </div>
+  <nav class="navbar navbar-light bg-light p-0">
+    <a class="navbar-brand" href="#">
+      <logo-icon class="pl-1"></logo-icon>
+    </a>
+    <add-msg v-on:send="doSend"></add-msg>
+  </nav>
 </template>
 
 <script>
 import msgBroker from '@/popup/services/msg-broker'
+import LogoIcon from '@/notification/components/icon'
+import AddMsg from '@/notification/components/add-msg'
+
+function getQueryVariable(variable) {
+  var query = window.location.search.substring(1)
+  var vars = query.split('&')
+
+  for (var i = 0; i < vars.length; i++) {
+    var pair = vars[i].split('=')
+    if (pair[0] === variable) {
+      return pair[1]
+    }
+  }
+
+  return null
+}
 
 export default {
+  components: { LogoIcon, AddMsg },
   data() {
     return {
-      loggedIn: false,
-      checking: true,
       url: '',
-      tab: {},
-      secrets: []
-    }
-  },
-  computed: {
-    lin() {
-      return this.loggedIn && !this.checking
-    },
-    lout() {
-      return !this.loggedIn && !this.checking
+      action: ''
     }
   },
   beforeMount() {
-    msgBroker.sendToRuntimeAndGet({ cmd: 'barLoad' }, msg => {
-      console.log('Got response for barLoad', msg)
-    })
+    this.action = getQueryVariable('action')
+  },
+  methods: {
+    doSend(msg) {
+      msgBroker.sendToRuntime(msg)
+    }
   }
 }
 </script>

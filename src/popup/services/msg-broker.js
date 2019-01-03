@@ -5,6 +5,7 @@ class MessageBroker {
     this.subs = []
     this.waits = {}
     browser.runtime.onMessage.addListener((r, s, c) => {
+      console.log('GotMest', r, s, c)
       return this.receiveMessage(r, s, c)
     })
   }
@@ -24,6 +25,9 @@ class MessageBroker {
   }
   subscribe(cb) {
     this.subs.push(cb)
+  }
+  sendToRuntime(msg) {
+    browser.runtime.sendMessage(msg)
   }
   sendToRuntimeAndGet(msg, ftor) {
     var cmdKey = msg.cmd + 'Response'

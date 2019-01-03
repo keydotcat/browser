@@ -1065,17 +1065,17 @@
           return
         }
 
-        if (msg.command === 'collectPageDetails') {
+        if (msg.cmd === 'collectPageDetails') {
           var pageDetails = collect(document)
           var pageDetailsObj = JSON.parse(pageDetails)
           safari.self.tab.dispatchMessage('bitwarden', {
-            command: 'collectPageDetailsResponse',
+            cmd: 'collectPageDetailsResponse',
             tab: msg.tab,
             details: pageDetailsObj,
             sender: msg.sender,
             bitwardenFrameId: window.__bitwardenFrameId
           })
-        } else if (msg.command === 'fillForm') {
+        } else if (msg.cmd === 'fillForm') {
           fill(document, msg.fillScript)
         }
       },
@@ -1085,18 +1085,18 @@
   }
 
   chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-    if (msg.command === 'collectPageDetails') {
+    if (msg.cmd === 'collectPageDetails') {
       var pageDetails = collect(document)
       var pageDetailsObj = JSON.parse(pageDetails)
       chrome.runtime.sendMessage({
-        command: 'collectPageDetailsResponse',
+        cmd: 'collectPageDetailsResponse',
         tab: msg.tab,
         details: pageDetailsObj,
         sender: msg.sender
       })
       sendResponse()
       return true
-    } else if (msg.command === 'fillForm') {
+    } else if (msg.cmd === 'fillForm') {
       fill(document, msg.fillScript)
       sendResponse()
       return true
