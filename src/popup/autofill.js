@@ -49,7 +49,6 @@ export default class Autofill {
       if (!fillScript || !fillScript.script || !fillScript.script.length) {
         return
       }
-      debugger
       msgBroker.sendMessageToTab(
         this.tab.id,
         {

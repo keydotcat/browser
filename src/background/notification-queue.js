@@ -4,16 +4,32 @@ import UrlParse from '@/commonjs/helpers/urlparse'
 export default class NotificationQueue {
   constructor() {
     this.queue = []
+    this.cleanup()
   }
   add(notification) {
     this.queue.push(notification)
   }
   removeTab(tab) {
-    for (let i = this.queue.length - 1; i >= 0; i--) {
+    var i = 0
+    while (i < this.queue.length) {
       if (this.queue[i].tabId === tab.id) {
         this.queue.splice(i, 1)
+      } else {
+        i++
       }
     }
+  }
+  cleanup() {
+    var i = 0
+    var now = new Date()
+    while (i < this.queue.length) {
+      if (this.queue[i].expires < now) {
+        this.queue.splice(i, 1)
+      } else {
+        i++
+      }
+    }
+    setTimeout(() => this.cleanup(), 2 * 60 * 1000) // check every 2 minutes
   }
   async check(tab) {
     if (tab == null) {

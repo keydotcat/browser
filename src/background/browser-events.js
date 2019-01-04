@@ -69,13 +69,38 @@ export default class BrowserEventMgr {
         break
       case 'bgNotificationClose':
         this.nots.removeTab(sender.tab)
-        this.nots.check(sender.tab)
+        BrowserApi.tabSendMessageData(sender.tab, 'closeNotificationBar')
+        break
       case 'bgAddLogin':
         this.addLogin(sender.tab, msg.login)
         break
       case 'bgAddLoginYes':
         this.addLoginYes(sender.tab, msg.data)
+        break
+      case 'bgChangePasswordYes':
+        this.changePassword(sender.tab)
+        break
     }
+  }
+
+  changePassword(tab) {
+    this.nots.runWith(tab, 'changePassword', notif => {
+      notif.secrets.forEach(secret => {
+        var i = 0
+        for (i = 0; i < secret.data.creds.length; i++) {
+          if (secret.data.creds[i].username === notif.username) {
+            secret.data.creds[i].password = notif.password
+          }
+        }
+        this.store.dispatch('secrets/update', {
+          teamId: secret.teamId,
+          vaultId: secret.vaultId,
+          secretId: secret.secretId,
+          secretData: new SecretData(secret.data)
+        })
+      })
+    })
+    BrowserApi.tabSendMessageData(tab, 'closeNotificationBar')
   }
 
   addLoginYes(tab, vault) {
@@ -96,6 +121,7 @@ export default class BrowserEventMgr {
       this.store.dispatch('secrets/create', { teamId: vault.tid, vaultId: vault.vid, secretData: secret })
     })
     this.nots.check(tab)
+    BrowserApi.tabSendMessageData(tab, 'closeNotificationBar')
   }
 
   addLogin(tab, login) {
@@ -104,11 +130,15 @@ export default class BrowserEventMgr {
       return
     }
     var secrets = this.store.getters['secrets/forUrl'](tabDomain)
-    var usermatch = secrets.filter(secret => {
-      return secret.data.creds.filter(cred => {
-        return cred.username == login.username
+    var usermatch = secrets
+      .filter(secret => {
+        return secret.data.creds.filter(cred => {
+          return cred.username == login.username
+        })
       })
-    })
+      .map(secret => {
+        return secret.cloneAsObject()
+      })
     this.nots.removeTab(tab)
     if (usermatch.length > 0) {
       this.nots.add({
