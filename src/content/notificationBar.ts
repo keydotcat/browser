@@ -510,20 +510,19 @@ document.addEventListener('DOMContentLoaded', event => {
     const barPageUrl: string = isSafari ? safari.extension.baseURI + barPage : chrome.extension.getURL(barPage)
 
     const iframe = document.createElement('iframe')
-    iframe.style.cssText = 'height: 40; width: 100%; border: 0; min-height: initial;'
+    iframe.style.cssText = 'height: 40px; width: 100%; border: 0; min-height: initial;'
     iframe.id = 'bit-notification-bar-iframe'
 
     const frameDiv = document.createElement('div')
     frameDiv.id = 'bit-notification-bar'
-    frameDiv.style.cssText = 'height: 40; width: 100%; top: 0; left: 0; padding: 0; position: fixed; ' + 'z-index: 2147483647; visibility: visible;'
+    frameDiv.style.cssText = 'height: 40px; width: 100%; top: 0; left: 0; padding: 0; position: fixed; ' + 'z-index: 2147483647; visibility: visible;'
     frameDiv.appendChild(iframe)
     document.body.appendChild(frameDiv)
-
     ;(iframe.contentWindow.location as any) = barPageUrl
 
     const spacer = document.createElement('div')
     spacer.id = 'bit-notification-bar-spacer'
-    spacer.style.cssText = 'height: 40;'
+    spacer.style.cssText = 'height: 40px;'
     document.body.insertBefore(spacer, document.body.firstChild)
   }
 

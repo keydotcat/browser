@@ -3,6 +3,7 @@ import AutofillMgr from '@/background/autofill'
 import { BrowserApi } from '@/helper/browser-api'
 import UrlParse from '@/commonjs/helpers/urlparse'
 import NotificationQueue from '@/background/notification-queue'
+import SecretData from '@/commonjs/secrets/secret_data'
 
 export default class BrowserEventMgr {
   constructor(store, iconMgr) {
@@ -66,32 +67,60 @@ export default class BrowserEventMgr {
       case 'bgGetVaults':
         await BrowserApi.tabSendMessageData(sender.tab, 'bgGetVaultsResponse', this.store.getters['user/allVaults'])
         break
+      case 'bgNotificationClose':
+        this.nots.removeTab(sender.tab)
+        this.nots.check(sender.tab)
       case 'bgAddLogin':
-        this.addLogin(msg.login, sender.tab)
+        this.addLogin(sender.tab, msg.login)
         break
       case 'bgAddLoginYes':
-        this.addLoginYes(sender.tab)
+        this.addLoginYes(sender.tab, msg.data)
     }
   }
 
-  addLoginYes(tab) {}
+  addLoginYes(tab, vault) {
+    this.nots.runWith(tab, 'addLogin', notif => {
+      var secret = new SecretData({
+        name: tab.title,
+        type: 'location',
+        urls: [notif.uri],
+        creds: [
+          {
+            type: 'password',
+            name: 'login',
+            username: notif.username,
+            password: notif.password
+          }
+        ]
+      })
+      this.store.dispatch('secrets/create', { teamId: vault.tid, vaultId: vault.vid, secretData: secret })
+    })
+    this.nots.check(tab)
+  }
 
-  addLogin(login, tab) {
+  addLogin(tab, login) {
     var tabDomain = UrlParse.getDomain(login.url)
     if (!tabDomain || tabDomain.length == 0) {
       return
     }
     var secrets = this.store.getters['secrets/forUrl'](tabDomain)
     var usermatch = secrets.filter(secret => {
-      return secret.creds.filter(cred => {
+      return secret.data.creds.filter(cred => {
         return cred.username == login.username
       })
     })
+    this.nots.removeTab(tab)
     if (usermatch.length > 0) {
-      //Replace
-      console.log('TODO login replace!')
+      this.nots.add({
+        type: 'changePassword',
+        secrets: usermatch,
+        username: login.username,
+        password: login.password,
+        domain: tabDomain,
+        tabId: tab.id,
+        expires: new Date(new Date().getTime() + 30 * 60000) // 30 minutes
+      })
     } else {
-      this.nots.removeTab(tab)
       this.nots.add({
         type: 'addLogin',
         username: login.username,
@@ -101,8 +130,8 @@ export default class BrowserEventMgr {
         tabId: tab.id,
         expires: new Date(new Date().getTime() + 30 * 60000) // 30 minutes
       })
-      this.nots.check(tab)
     }
+    this.nots.check(tab)
   }
 
   async sendPopupData() {

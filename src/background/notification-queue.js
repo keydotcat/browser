@@ -43,4 +43,23 @@ export default class NotificationQueue {
       break
     }
   }
+  runWith(tab, nType, ftor) {
+    var i = 0
+    while (i < this.queue.length) {
+      var notif = this.queue[i]
+      if (notif.tabId !== tab.id || notif.type !== nType) {
+        i++
+        continue
+      }
+
+      const tabDomain = UrlParse.getDomain(tab.url)
+      if (tabDomain != null && tabDomain !== notif.domain) {
+        i++
+        continue
+      }
+
+      this.queue.splice(i, 1)
+      ftor(notif)
+    }
+  }
 }

@@ -3,7 +3,8 @@
     <a class="navbar-brand" href="#">
       <logo-icon class="pl-1"></logo-icon>
     </a>
-    <add-msg v-on:send="doSend"></add-msg>
+    <add-msg v-if="action=='add'" v-on:send="doSend"></add-msg>
+    <change-pass-msg v-if="action=='change'" v-on:send="doSend"></change-pass-msg>
   </nav>
 </template>
 
@@ -11,6 +12,7 @@
 import msgBroker from '@/popup/services/msg-broker'
 import LogoIcon from '@/notification/components/icon'
 import AddMsg from '@/notification/components/add-msg'
+import ChangePassMsg from '@/notification/components/change-pass-msg'
 
 function getQueryVariable(variable) {
   var query = window.location.search.substring(1)
@@ -27,7 +29,7 @@ function getQueryVariable(variable) {
 }
 
 export default {
-  components: { LogoIcon, AddMsg },
+  components: { LogoIcon, AddMsg, ChangePassMsg },
   data() {
     return {
       url: '',

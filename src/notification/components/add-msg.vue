@@ -56,7 +56,7 @@ export default {
       this.$emit('send', { cmd: 'bgAddLoginYes', data: this.vaults[this.vi] })
     },
     ignore() {
-      this.$emit('send', { cmd: 'bgAddLoginNo' })
+      this.$emit('send', { cmd: 'bgNotificationClose' })
     }
   }
 }
