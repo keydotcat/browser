@@ -22,24 +22,13 @@
         </p>
       </div>
     </div>
-    <div
-      v-if="expanded"
-      class="pl-2"
-    >
+    <div v-if="expanded" class="pl-2" >
       <p class="text-muted m-1">
         Credentials
       </p>
-      <div
-        v-for="cred in secret.data.creds"
-        class="row m-0 pl-3"
-      >
-        <div
-          class="col-1 pointme"
-          @click="fillWithCred(cred)"
-        >
-          <i class="material-icons mt-auto mb-auto">
-            open_in_browser
-          </i>
+      <div v-for="cred in secret.data.creds" class="row m-0 pl-3" >
+        <div class="col-1 pointme" @click="fillWithCred(cred)" >
+          <i class="material-icons mt-auto mb-auto"> open_in_browser </i>
         </div>
         <div class="col-11">
           {{ cred.name }}: {{ cred.username }}

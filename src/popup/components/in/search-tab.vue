@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <SecretList :expand="false" :secrets="secrets"/>
+    <secret-list :expand="false" :secrets="secrets"/>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ import Secret from '@/commonjs/secrets/secret'
 import msgBroker from '@/popup/services/msg-broker'
 
 export default {
-  name: 'SeachTab',
+  name: 'seach-tab',
   components: { SecretList },
   data() {
     return {

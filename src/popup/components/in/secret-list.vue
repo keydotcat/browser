@@ -21,7 +21,7 @@
 import SecretDetail from '@/popup/components/in/secret-detail'
 
 export default {
-  name: 'SecretList',
+  name: 'secret-list',
   components: { SecretDetail },
   props: {
     secrets: Array,

@@ -3,46 +3,30 @@
     <div class="card-header bg-white">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
-          <a
-            class="nav-link"
-            :class="{active:this.active=='tab'}"
-            href="#"
-            @click="setActive('tab')"
-          >
-            Tab <span
-              v-if="numberOfTabCredentials > 0"
-              class="badge badge-dark"
-            >
-              {{ numberOfTabCredentials }}
-            </span>
+          <a class="nav-link" :class="{active:this.active=='tab'}" href="#" @click="setActive('tab')" > 
+            Tab 
+            <span v-if="numberOfTabCredentials > 0" class="badge badge-dark" > {{ numberOfTabCredentials }} </span>
           </a>
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link"
-            :class="{active:this.active=='search'}"
-            href="#"
-            @click="setActive('search')"
-          >
+          <a class="nav-link" :class="{active:this.active=='search'}" href="#" @click="setActive('search')" >
             Search
           </a>
         </li>
-        <button
-          type="button"
-          class="btn btn-sm btn-outline-dark border-0 ml-auto"
-          @click.prevent="logout"
-        >
+        <li class="nav-item">
+          <a class="nav-link" :class="{active:this.active=='generator'}" href="#" @click="setActive('generator')" >
+            Password generator
+          </a>
+        </li>
+        <button type="button" class="btn btn-sm btn-outline-dark border-0 ml-auto" @click.prevent="logout" >
           Logout
         </button>
       </ul>
     </div>
     <div class="card-body p-0">
-      <SecretList
-        v-if="active=='tab'"
-        :expand="true"
-        :secrets="tabSecrets"
-      />
-      <SearchTab v-if="active=='search'" />
+      <secret-list v-if="active=='tab'" :expand="true" :secrets="tabSecrets" />
+      <search-tab v-if="active=='search'" />
+      <generator-tab v-if="active=='generator'" />
     </div>
   </div>
 </template>
@@ -50,11 +34,12 @@
 <script>
 import SecretList from '@/popup/components/in/secret-list'
 import SearchTab from '@/popup/components/in/search-tab'
+import GeneratorTab from '@/popup/components/in/generator-tab'
 import msgBroker from '@/popup/services/msg-broker'
 
 export default {
   name: 'LoggedIn',
-  components: { SecretList, SearchTab },
+  components: { SecretList, SearchTab, GeneratorTab },
   props: {
     tabSecrets: Array
   },
@@ -91,7 +76,7 @@ export default {
 
 <style scoped>
 .main {
-  width: 400px;
+  width: 450px;
   height: 500px;
 }
 
