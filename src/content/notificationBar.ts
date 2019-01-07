@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', event => {
-  if (window.location.hostname.indexOf('vault.bitwarden.com') > -1) {
+  if (window.location.hostname.indexOf('vault.keycat.com') > -1) {
     return
   }
 
@@ -23,24 +23,24 @@ document.addEventListener('DOMContentLoaded', event => {
   let disabledChangedPasswordNotification = false
 
   if (isSafari) {
-    if ((window as any).__bitwardenFrameId == null) {
-      ;(window as any).__bitwardenFrameId = Math.floor(Math.random() * Math.floor(99999999))
+    if ((window as any).__keycatFrameId == null) {
+      ;(window as any).__keycatFrameId = Math.floor(Math.random() * Math.floor(99999999))
     }
     if (inIframe) {
       return
     }
 
     const responseCommand = 'notificationBarDataResponse'
-    safari.self.tab.dispatchMessage('bitwarden', {
+    safari.self.tab.dispatchMessage('keycat', {
       cmd: 'bgGetDataForTab',
       responseCommand: responseCommand,
-      bitwardenFrameId: (window as any).__bitwardenFrameId
+      keycatFrameId: (window as any).__bitwardenFrameId
     })
     safari.self.addEventListener(
       'message',
       (msgEvent: any) => {
         const msg = msgEvent.message
-        if (msg.bitwardenFrameId != null && (window as any).__bitwardenFrameId !== msg.bitwardenFrameId) {
+        if (msg.keycatFrameId != null && (window as any).__bitwardenFrameId !== msg.bitwardenFrameId) {
           return
         }
         if (msg.cmd === responseCommand && msg.data) {
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', event => {
             }
 
             const tagName = addedNode.tagName != null ? addedNode.tagName.toLowerCase() : null
-            if (tagName != null && tagName === 'form' && (addedNode.dataset == null || !addedNode.dataset.bitwardenWatching)) {
+            if (tagName != null && tagName === 'form' && (addedNode.dataset == null || !addedNode.dataset.keycatWatching)) {
               doCollect = true
               break
             }
@@ -155,7 +155,7 @@ document.addEventListener('DOMContentLoaded', event => {
               continue
             }
 
-            const forms = addedNode.querySelectorAll('form:not([data-bitwarden-watching])')
+            const forms = addedNode.querySelectorAll('form:not([data-keycat-watching])')
             if (forms != null && forms.length > 0) {
               doCollect = true
               break
@@ -233,7 +233,7 @@ document.addEventListener('DOMContentLoaded', event => {
         formEl = document.getElementsByTagName('form')[index]
       }
 
-      if (formEl != null && formEl.dataset.bitwardenWatching !== '1') {
+      if (formEl != null && formEl.dataset.keycatWatching !== '1') {
         const formDataObj: any = {
           data: f,
           formEl: formEl,
@@ -244,7 +244,7 @@ document.addEventListener('DOMContentLoaded', event => {
         locateFields(formDataObj)
         formData.push(formDataObj)
         listen(formEl)
-        formEl.dataset.bitwardenWatching = '1'
+        formEl.dataset.keycatWatching = '1'
       }
     })
   }
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', event => {
       form = e.target as HTMLFormElement
     }
 
-    if (form == null || form.dataset.bitwardenProcessed === '1') {
+    if (form == null || form.dataset.keycatProcessed === '1') {
       return
     }
 
@@ -460,9 +460,9 @@ document.addEventListener('DOMContentLoaded', event => {
   }
 
   function processedForm(form: HTMLFormElement) {
-    form.dataset.bitwardenProcessed = '1'
+    form.dataset.keycatProcessed = '1'
     window.setTimeout(() => {
-      form.dataset.bitwardenProcessed = '0'
+      form.dataset.keycatProcessed = '0'
     }, 500)
   }
 
@@ -575,8 +575,8 @@ document.addEventListener('DOMContentLoaded', event => {
 
   function sendPlatformMessage(msg: any) {
     if (isSafari) {
-      msg.bitwardenFrameId = (window as any).__bitwardenFrameId
-      safari.self.tab.dispatchMessage('bitwarden', msg)
+      msg.keycatFrameId = (window as any).__bitwardenFrameId
+      safari.self.tab.dispatchMessage('keycat', msg)
     } else {
       chrome.runtime.sendMessage(msg)
     }

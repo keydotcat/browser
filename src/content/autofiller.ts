@@ -6,20 +6,20 @@ document.addEventListener('DOMContentLoaded', event => {
   const isSafari = typeof safari !== 'undefined' && navigator.userAgent.indexOf(' Safari/') !== -1 && navigator.userAgent.indexOf('Chrome') === -1
 
   if (isSafari) {
-    if ((window as any).__bitwardenFrameId == null) {
-      ;(window as any).__bitwardenFrameId = Math.floor(Math.random() * Math.floor(99999999))
+    if ((window as any).__keycatFrameId == null) {
+      ;(window as any).__keycatFrameId = Math.floor(Math.random() * Math.floor(99999999))
     }
     const responseCommand = 'autofillerAutofillOnPageLoadEnabledResponse'
-    safari.self.tab.dispatchMessage('bitwarden', {
+    safari.self.tab.dispatchMessage('keycat', {
       cmd: 'bgGetDataForTab',
       responseCommand: responseCommand,
-      bitwardenFrameId: (window as any).__bitwardenFrameId
+      keycatFrameId: (window as any).__bitwardenFrameId
     })
     safari.self.addEventListener(
       'message',
       (msgEvent: any) => {
         const msg = msgEvent.message
-        if (msg.bitwardenFrameId != null && (window as any).__bitwardenFrameId !== msg.bitwardenFrameId) {
+        if (msg.keycatFrameId != null && (window as any).__bitwardenFrameId !== msg.bitwardenFrameId) {
           return
         }
         if (msg.cmd === responseCommand && msg.data.autofillEnabled === true) {
@@ -68,8 +68,8 @@ document.addEventListener('DOMContentLoaded', event => {
       }
 
       if (isSafari) {
-        msg.bitwardenFrameId = (window as any).__bitwardenFrameId
-        safari.self.tab.dispatchMessage('bitwarden', msg)
+        msg.keycatFrameId = (window as any).__bitwardenFrameId
+        safari.self.tab.dispatchMessage('keycat', msg)
       } else {
         chrome.runtime.sendMessage(msg)
       }

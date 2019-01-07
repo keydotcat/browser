@@ -36,7 +36,7 @@
     3. Unminify and format to meet Mozilla review requirements.
     4. Remove unnecessary input types from getFormElements query selector and limit number of elements returned.
     5. Remove fakeTested prop.
-    6. Rename com.agilebits.* stuff to com.bitwarden.*
+    6. Rename com.agilebits.* stuff to cat.key.*
     7. Remove "some useful globals" on window
     */
 
@@ -49,7 +49,7 @@
     document.addEventListener(
       'input',
       function(inputevent) {
-        inputevent.a !== false && inputevent.target.tagName.toLowerCase() === 'input' && (inputevent.target.dataset['com.bitwarden.browser.userEdited'] = 'yes')
+        inputevent.a !== false && inputevent.target.tagName.toLowerCase() === 'input' && (inputevent.target.dataset['cat.key.browser.userEdited'] = 'yes')
       },
       true
     )
@@ -887,10 +887,10 @@
       afterValSetFunc(el)
       setValueForElementByEvent(el)
       canSeeElementToStyle(el) &&
-        ((el.className += ' com-bitwarden-browser-animated-fill'),
+        ((el.className += ' cat-keycat-browser-animated-fill'),
         setTimeout(function() {
           // START MODIFICATION
-          el && el.className && (el.className = el.className.replace(/(\\s)?com-bitwarden-browser-animated-fill/, ''))
+          el && el.className && (el.className = el.className.replace(/(\\s)?cat-keycat-browser-animated-fill/, ''))
           // END MODIFICATION
         }, styleTimeout))
     }
@@ -1054,26 +1054,26 @@
     */
 
   if (typeof safari !== 'undefined' && navigator.userAgent.indexOf(' Safari/') !== -1 && navigator.userAgent.indexOf('Chrome') === -1) {
-    if (window.__bitwardenFrameId == null) {
-      window.__bitwardenFrameId = Math.floor(Math.random() * Math.floor(99999999))
+    if (window.__keycatFrameId == null) {
+      window.__keycatFrameId = Math.floor(Math.random() * Math.floor(99999999))
     }
     safari.self.addEventListener(
       'message',
       function(msgEvent) {
         var msg = msgEvent.message
-        if (msg.bitwardenFrameId != null && window.__bitwardenFrameId !== msg.bitwardenFrameId) {
+        if (msg.keycatFrameId != null && window.__bitwardenFrameId !== msg.bitwardenFrameId) {
           return
         }
 
         if (msg.cmd === 'collectPageDetails') {
           var pageDetails = collect(document)
           var pageDetailsObj = JSON.parse(pageDetails)
-          safari.self.tab.dispatchMessage('bitwarden', {
+          safari.self.tab.dispatchMessage('keycat', {
             cmd: 'collectPageDetailsResponse',
             tab: msg.tab,
             details: pageDetailsObj,
             sender: msg.sender,
-            bitwardenFrameId: window.__bitwardenFrameId
+            keycatFrameId: window.__bitwardenFrameId
           })
         } else if (msg.cmd === 'fillForm') {
           fill(document, msg.fillScript)

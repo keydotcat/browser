@@ -131,25 +131,39 @@ export default class BrowserEventMgr {
     }
     var secrets = this.store.getters['secrets/forUrl'](tabDomain)
     var usermatch = secrets
-      .filter(secret => {
-        return secret.data.creds.filter(cred => {
+      .map(secret => {
+        var ns = secret.cloneAsObject()
+        ns.data.creds = ns.data.creds.filter(cred => {
           return cred.username == login.username
         })
+        return ns
       })
-      .map(secret => {
-        return secret.cloneAsObject()
+      .filter(secret => {
+        return secret.data.creds.length > 0
       })
     this.nots.removeTab(tab)
     if (usermatch.length > 0) {
-      this.nots.add({
-        type: 'changePassword',
-        secrets: usermatch,
-        username: login.username,
-        password: login.password,
-        domain: tabDomain,
-        tabId: tab.id,
-        expires: new Date(new Date().getTime() + 30 * 60000) // 30 minutes
-      })
+      var passdif = usermatch
+        .map(secret => {
+          secret.data.creds = secret.data.creds.filter(cred => {
+            return cred.password != login.password
+          })
+          return secret
+        })
+        .filter(secret => {
+          return secret.data.creds.length > 0
+        })
+      if (passdif.length > 0) {
+        this.nots.add({
+          type: 'changePassword',
+          secrets: passdif,
+          username: login.username,
+          password: login.password,
+          domain: tabDomain,
+          tabId: tab.id,
+          expires: new Date(new Date().getTime() + 30 * 60000) // 30 minutes
+        })
+      }
     } else {
       this.nots.add({
         type: 'addLogin',
