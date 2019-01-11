@@ -10,6 +10,11 @@ import wuiapp from './wui-app'
 import axios from 'axios'
 import AutoToastSvc from '@/commonjs/wui/services/autotoast'
 
+//JS Libs used for bootstrap
+import 'jquery/dist/jquery.min.js'
+import 'popper.js/dist/umd/popper.min.js'
+import 'bootstrap/dist/js/bootstrap.min.js'
+
 axios.interceptors.response.use(
   function(response) {
     return response
@@ -19,11 +24,6 @@ axios.interceptors.response.use(
     return Promise.reject(err)
   }
 )
-
-//JS Libs used for bootstrap
-import 'jquery/dist/jquery.min.js'
-import 'popper.js/dist/umd/popper.min.js'
-import 'bootstrap/dist/js/bootstrap.min.js'
 
 //Use local keymanager
 //TODO: Use webworkers here
