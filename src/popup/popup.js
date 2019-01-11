@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import App from './App'
+import PopupApp from './popup-app'
 
 import 'jquery/dist/jquery.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
@@ -8,5 +8,5 @@ import 'bootstrap/dist/js/bootstrap.min.js'
 new Vue({
   el: '#app',
 
-  render: h => h(App)
+  render: h => h(PopupApp)
 })

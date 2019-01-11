@@ -1,33 +1,24 @@
 <template>
   <div class="notloggedin">
-    <div
-      v-if="checking"
-      class="container loading d-flex justify-content-center align-items-center"
-    >
+    <div v-if="checking" class="container loading d-flex justify-content-center align-items-center" >
       <i class="material-icons spinner">
         replay
       </i>
     </div>
-    <div
-      v-if="!checking"
-      class="container loaded d-flex justify-content-center align-items-center"
-    >
-      <LoginForm
-        v-if="isKeyCat"
-        :url="url"
-      />
-      <NotKeyCat v-if="!isKeyCat" />
+    <div v-if="!checking" class="container loaded d-flex justify-content-center align-items-center" >
+      <login-form v-if="isKeyCat" :url="url" />
+      <not-keycat v-if="!isKeyCat" />
     </div>
   </div>
 </template>
 
 <script>
 import discoverSvc from '@/popup/services/discover'
-import NotKeyCat from '@/popup/components/out/not_key_cat'
-import LoginForm from '@/popup/components/out/login_form'
+import NotKeyCat from '@/popup/components/out/not-keycat'
+import LoginForm from '@/popup/components/out/login-form'
 
 export default {
-  name: 'NotLoggedIn',
+  name: 'not-logged-in',
   components: { NotKeyCat, LoginForm },
   props: {
     tabUrl: String

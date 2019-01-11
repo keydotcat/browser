@@ -59,7 +59,7 @@
 import msgBroker from '@/popup/services/msg-broker'
 
 export default {
-  name: 'LoginForm',
+  name: 'login-form',
   props: {
     url: String
   },

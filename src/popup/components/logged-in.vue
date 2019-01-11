@@ -28,6 +28,7 @@
       <search-tab v-if="active=='search'" />
       <generator-tab v-if="active=='generator'" />
     </div>
+    <footer-nav class="p-1"></footer-nav>
   </div>
 </template>
 
@@ -35,11 +36,12 @@
 import SecretList from '@/popup/components/in/secret-list'
 import SearchTab from '@/popup/components/in/search-tab'
 import GeneratorTab from '@/popup/components/in/generator-tab'
+import FooterNav from '@/popup/components/in/footer-nav'
 import msgBroker from '@/popup/services/msg-broker'
 
 export default {
-  name: 'LoggedIn',
-  components: { SecretList, SearchTab, GeneratorTab },
+  name: 'logged-in',
+  components: { SecretList, SearchTab, GeneratorTab, FooterNav },
   props: {
     tabSecrets: Array
   },

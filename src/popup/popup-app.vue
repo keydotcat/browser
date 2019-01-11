@@ -1,13 +1,7 @@
 <template>
   <div class="top">
-    <LoggedIn
-      v-if="lin"
-      :tab-secrets="secrets"
-    />
-    <NotLoggedIn
-      v-if="lout"
-      :tab-url="url"
-    />
+    <logged-in v-if="lin" :tab-secrets="secrets" />
+    <not-logged-in v-if="lout" :tab-url="url" />
     <div
       v-if="checking"
       class="container loading d-flex justify-content-center align-items-center"
@@ -27,6 +21,7 @@ import tabData from '@/popup/tab-data'
 import msgBroker from '@/popup/services/msg-broker'
 
 export default {
+  name: 'keycat-popup',
   components: { LoggedIn, NotLoggedIn },
   data() {
     return {

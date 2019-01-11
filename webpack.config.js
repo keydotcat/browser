@@ -16,7 +16,8 @@ const config = {
     'content/autofiller': './content/autofiller.ts',
     'content/notificationBar': './content/notificationBar.ts',
     'popup/popup': './popup/popup.js',
-    'notification/bar': './notification/bar'
+    'notification/bar': './notification/bar',
+    'wui/wui': './wui/wui.js'
   },
   output: {
     path: __dirname + '/dist',
@@ -74,8 +75,10 @@ const config = {
       { from: 'icons', to: 'icons', ignore: ['icon.xcf'] },
       { from: 'popup/popup.html', to: 'popup/popup.html' },
       { from: 'notification/bar.html', to: 'notification/bar.html' },
+      { from: 'wui/wui.html', to: 'wui/wui.html' },
       { from: 'content/autofill.css', to: 'content/autofill.css' },
       { from: '../node_modules/argon2-browser/dist/argon2-asm.min.js' },
+      { from: '../node_modules/argon2-browser/dist/argon2-asm.min.js', to: 'wui/argon2-asm.min.js' },
       {
         from: 'manifest.json',
         to: 'manifest.json',
