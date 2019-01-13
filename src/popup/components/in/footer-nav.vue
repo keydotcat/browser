@@ -1,11 +1,13 @@
 <template>
-    <div class="footer text-left">
-      <button class="btn btn-sm" @click.prevent="openWui"><i class="material-icons">open_in_new</i>Go to KeyCat</button>
+    <div class="footer text-left d-flex justify-content-between">
+      <button class="btn btn-sm d-flex" @click.prevent="openWui"><i class="material-icons">open_in_new</i>Go to KeyCat</button>
+      <span class="text-muted p-1 small">{{repoVersion}}</span>
     </div>
 </template>
 
 <script>
 import browser from 'webextension-polyfill'
+import versions from '@/helper/version'
 
 export default {
   name: 'footer-nav',
@@ -15,6 +17,11 @@ export default {
         active: true,
         url: 'wui/wui.html'
       })
+    }
+  },
+  computed: {
+    repoVersion() {
+      return versions.repo
     }
   }
 }

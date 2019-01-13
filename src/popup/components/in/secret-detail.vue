@@ -1,22 +1,9 @@
 <template>
   <div class="text-left pl-1">
     <div class="row m-0">
-      <div
-        class="col font-weight-bold d-flex p-0"
-        @click="expanded=!expanded"
-      >
-        <i
-          v-if="!expanded"
-          class="material-icons mt-auto mb-auto"
-        >
-          chevron_right
-        </i>
-        <i
-          v-if="expanded"
-          class="material-icons mt-auto mb-auto"
-        >
-          expand_more
-        </i>
+      <div class="col font-weight-bold d-flex p-0" @click="expanded=!expanded">
+        <i v-if="!expanded" class="material-icons mt-auto mb-auto">chevron_right</i>
+        <i v-if="expanded" class="material-icons mt-auto mb-auto">expand_more</i>
         <p class="m-0">
           {{ secret.data.name }}
         </p>
@@ -34,22 +21,10 @@
           {{ cred.name }}: {{ cred.username }}
         </div>
       </div>
-      <p
-        v-if="secret.data.urls.length > 0"
-        class="text-muted m-1"
-      >
-        URLs
-      </p>
-      <div
-        v-for="url in secret.data.urls"
-        class="row m-0 pl-3"
-      >
+      <p v-if="secret.data.urls.length > 0" class="text-muted m-1" >URLs</p>
+      <div v-for="url in secret.data.urls" class="row m-0 pl-3" >
         <div class="col-1 text-right">
-          <a
-            class="text-muted"
-            :href="url"
-            target="_blank"
-          >
+          <a class="text-muted" :href="url" target="_blank" >
             <i class="material-icons mt-auto mb-auto">
               open_in_new
             </i>

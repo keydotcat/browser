@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ChromeExtensionReloader = require('webpack-chrome-extension-reloader')
 const { VueLoaderPlugin } = require('vue-loader')
 const { version } = require('./package.json')
+const child_process = require('child_process')
 
 const config = {
   mode: process.env.NODE_ENV,
@@ -100,15 +101,26 @@ const config = {
   ]
 }
 
+let defines = {}
 if (config.mode === 'production') {
-  config.plugins = (config.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    })
-  ])
+  let rgv = child_process
+    .execSync('git describe --tags --always --abbrev=8')
+    .toString()
+    .trim()
+  let cgv = child_process
+    .execSync('git describe --tags --always --abbrev=8', { cwd: 'src/commonjs' })
+    .toString()
+    .trim()
+
+  defines['GIT_REPO'] = `'${rgv}'`
+  defines['GIT_FULL'] = `'extension: ${rgv}/ cjs: ${cgv}'`
+  defines['process.env.NODE_ENV'] = '"production"'
+} else {
+  defines['GIT_REPO'] = '"dev"'
+  defines['GIT_FULL'] = '"dev"'
 }
+
+config.plugins = (config.plugins || []).concat([new webpack.DefinePlugin(defines)])
 
 if (process.env.HMR === 'true') {
   config.plugins = (config.plugins || []).concat([new ChromeExtensionReloader()])

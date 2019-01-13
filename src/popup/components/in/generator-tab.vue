@@ -34,9 +34,9 @@
         </div>
       </div>
     </div>
-    <div class="footer p-1">
+    <div class="p-1 d-flex justify-content-around">
+      <button type="button" class="btn btn-warning" @click.prevent="fill()">Fill page form with password</button>
       <button type="button" class="btn btn-success" @click.prevent="gen()">Generate</button>
-      <button type="button" class="btn btn-warning float-right" @click.prevent="fill()">Fill page form with password</button>
     </div>
   </form>
 </template>
