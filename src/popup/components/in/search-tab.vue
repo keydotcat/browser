@@ -4,13 +4,11 @@
       <div class="input-group mb-1">
         <input v-model="searchName" type="text" class="form-control" placeholder="Search" @keyup="doSearch"/>
         <div class="input-group-append">
-          <i class="material-icons input-group-text">
-            search
-          </i>
+          <i class="material-icons input-group-text"> search </i>
         </div>
       </div>
     </div>
-    <secret-list :expand="false" :secrets="secrets"/>
+    <secret-list :expand="false" class="secret-list" :secrets="secrets"/>
   </div>
 </template>
 
@@ -42,3 +40,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.secret-list {
+  overflow: auto;
+  height: 350px;
+}
+</style>

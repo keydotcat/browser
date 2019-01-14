@@ -1,17 +1,11 @@
 <template>
   <div>
-    <p v-if="this.secrets.length==0">
+    <p v-if="this.secrets.length==0" class='p-3'>
       No credentials found
     </p>
     <ul class="list-group w-100">
-      <li
-        v-for="secret in this.secrets"
-        class="list-group-item p-0"
-      >
-        <SecretDetail
-          :expand="expand"
-          :secret="secret"
-        />
+      <li v-for="secret in this.secrets" class="list-group-item p-0" >
+        <SecretDetail :expand="expand" :secret="secret" />
       </li>
     </ul>
   </div>

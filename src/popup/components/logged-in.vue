@@ -18,9 +18,7 @@
             Password generator
           </a>
         </li>
-        <button type="button" class="btn btn-sm btn-outline-dark border-0 ml-auto" @click.prevent="logout" >
-          Logout
-        </button>
+        <span class="border-0 ml-auto small text-muted">{{repoVersion}}</span>
       </ul>
     </div>
     <div class="card-body p-0">
@@ -38,6 +36,7 @@ import SearchTab from '@/popup/components/in/search-tab'
 import GeneratorTab from '@/popup/components/in/generator-tab'
 import FooterNav from '@/popup/components/in/footer-nav'
 import msgBroker from '@/popup/services/msg-broker'
+import versions from '@/helper/version'
 
 export default {
   name: 'logged-in',
@@ -61,6 +60,9 @@ export default {
         nc += sec.data._data.creds.length
       })
       return nc
+    },
+    repoVersion() {
+      return versions.repo
     }
   },
   methods: {

@@ -4,7 +4,7 @@
       <div class="col font-weight-bold d-flex p-0" @click="expanded=!expanded">
         <i v-if="!expanded" class="material-icons mt-auto mb-auto">chevron_right</i>
         <i v-if="expanded" class="material-icons mt-auto mb-auto">expand_more</i>
-        <p class="m-0">
+        <p class="m-1">
           {{ secret.data.name }}
         </p>
       </div>
@@ -24,7 +24,7 @@
       <p v-if="secret.data.urls.length > 0" class="text-muted m-1" >URLs</p>
       <div v-for="url in secret.data.urls" class="row m-0 pl-3" >
         <div class="col-1 text-right">
-          <a class="text-muted" :href="url" target="_blank" >
+          <a class="text-muted" href="#" @click="openUrl(url)">
             <i class="material-icons mt-auto mb-auto">
               open_in_new
             </i>
@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import browser from 'webextension-polyfill'
 import tabData from '@/popup/tab-data'
 
 export default {
@@ -55,6 +56,16 @@ export default {
   methods: {
     fillWithCred(cred) {
       tabData.fillWithCred(cred)
+    },
+    openUrl(url) {
+      browser.tabs
+        .create({
+          active: true,
+          url: url
+        })
+        .then(() => {
+          window.close()
+        })
     }
   }
 }
