@@ -15,7 +15,7 @@ export default {
     openWui() {
       browser.tabs.create({
         active: true,
-        url: 'wui/wui.html'
+        url: '/wui/wui.html'
       })
     }
   },
