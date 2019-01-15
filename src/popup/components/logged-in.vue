@@ -22,7 +22,7 @@
       </ul>
     </div>
     <div class="card-body p-0">
-      <secret-list v-if="active=='tab'" :expand="true" :secrets="tabSecrets" />
+      <secret-list class='tablist'send v-if="active=='tab'" :expand="true" :secrets="tabSecrets" />
       <search-tab v-if="active=='search'" />
       <generator-tab v-if="active=='generator'" />
     </div>
@@ -86,5 +86,10 @@ export default {
 
 .nav-link {
   color: #495057;
+}
+
+.tablist {
+  overflow: auto;
+  height: 400px;
 }
 </style>
