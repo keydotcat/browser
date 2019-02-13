@@ -1,7 +1,7 @@
 <template>
   <form class="form-inline">
     <span class="mr-3">Do you want to replace the password for this credential?</span>
-      <button class="btn btn-sm btn-outline-success mr-3" type="button" @click.prevent="save()">Replace password</button>
+    <button class="btn btn-sm btn-outline-success mr-3" type="button" @click.prevent="save()">Replace password</button>
     <button class="btn btn-sm btn-outline-secondary mr-3" @click.prevent="ignore" type="button">Ignore</button>
   </form>
 </template>

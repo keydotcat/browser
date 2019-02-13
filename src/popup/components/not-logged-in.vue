@@ -1,11 +1,11 @@
 <template>
   <div class="notloggedin">
-    <div v-if="checking" class="container loading d-flex justify-content-center align-items-center" >
+    <div v-if="checking" class="container loading d-flex justify-content-center align-items-center">
       <i class="material-icons spinner">
         replay
       </i>
     </div>
-    <div v-if="!checking" class="container loaded d-flex justify-content-center align-items-center" >
+    <div v-if="!checking" class="container loaded d-flex justify-content-center align-items-center">
       <login-form v-if="isKeyCat" :url="url" />
       <not-keycat v-if="!isKeyCat" />
     </div>

@@ -3,28 +3,28 @@
     <div class="card-header bg-white">
       <ul class="nav nav-tabs card-header-tabs">
         <li class="nav-item">
-          <a class="nav-link" :class="{active:this.active=='tab'}" href="#" @click="setActive('tab')" > 
-            Tab 
-            <span v-if="numberOfTabCredentials > 0" class="badge badge-dark" > {{ numberOfTabCredentials }} </span>
+          <a class="nav-link" :class="{ active: this.active == 'tab' }" href="#" @click="setActive('tab')">
+            Tab
+            <span v-if="numberOfTabCredentials > 0" class="badge badge-dark"> {{ numberOfTabCredentials }} </span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" :class="{active:this.active=='search'}" href="#" @click="setActive('search')" >
+          <a class="nav-link" :class="{ active: this.active == 'search' }" href="#" @click="setActive('search')">
             Search
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" :class="{active:this.active=='generator'}" href="#" @click="setActive('generator')" >
+          <a class="nav-link" :class="{ active: this.active == 'generator' }" href="#" @click="setActive('generator')">
             Password generator
           </a>
         </li>
-        <span class="border-0 ml-auto small text-muted">{{repoVersion}}</span>
+        <span class="border-0 ml-auto small text-muted">{{ repoVersion }}</span>
       </ul>
     </div>
     <div class="card-body p-0">
-      <secret-list class='tablist'send v-if="active=='tab'" :expand="true" :secrets="tabSecrets" />
-      <search-tab v-if="active=='search'" />
-      <generator-tab v-if="active=='generator'" />
+      <secret-list class="tablist" send v-if="active == 'tab'" :expand="true" :secrets="tabSecrets" />
+      <search-tab v-if="active == 'search'" />
+      <generator-tab v-if="active == 'generator'" />
     </div>
     <footer-nav class="p-1"></footer-nav>
   </div>

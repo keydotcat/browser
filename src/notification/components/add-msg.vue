@@ -3,7 +3,7 @@
     <span class="mr-3">Do you want to add the credential to you KeyCat vault?</span>
     <div class="btn-group mr-3">
       <button class="btn btn-sm btn-outline-success" v-if="numVaults > 1" type="button" @click.prevent="prev()">&lt;</button>
-      <button class="btn btn-sm btn-outline-success" type="button" @click.prevent="save()">Save credential to {{activeVault}}</button>
+      <button class="btn btn-sm btn-outline-success" type="button" @click.prevent="save()">Save credential to {{ activeVault }}</button>
       <button class="btn btn-sm btn-outline-success" v-if="numVaults > 1" type="button" @click.prevent="next()">&gt;</button>
     </div>
     <button class="btn btn-sm btn-outline-secondary mr-3" @click.prevent="ignore" type="button">Ignore</button>

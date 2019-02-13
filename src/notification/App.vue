@@ -3,8 +3,8 @@
     <a class="navbar-brand" href="#">
       <logo-icon class="pl-1"></logo-icon>
     </a>
-    <add-msg v-if="action=='add'" v-on:send="doSend"></add-msg>
-    <change-pass-msg v-if="action=='change'" v-on:send="doSend"></change-pass-msg>
+    <add-msg v-if="action == 'add'" v-on:send="doSend"></add-msg>
+    <change-pass-msg v-if="action == 'change'" v-on:send="doSend"></change-pass-msg>
   </nav>
 </template>
 

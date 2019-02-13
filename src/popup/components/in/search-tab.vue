@@ -2,13 +2,13 @@
   <div>
     <div class="p-1">
       <div class="input-group mb-1">
-        <input v-model="searchName" type="text" class="form-control" placeholder="Search" @keyup="doSearch" autofocus/>
+        <input v-model="searchName" type="text" class="form-control" placeholder="Search" @keyup="doSearch" autofocus />
         <div class="input-group-append">
           <i class="material-icons input-group-text"> search </i>
         </div>
       </div>
     </div>
-    <secret-list :expand="false" class="secret-list" :secrets="secrets"/>
+    <secret-list :expand="false" class="secret-list" :secrets="secrets" />
   </div>
 </template>
 

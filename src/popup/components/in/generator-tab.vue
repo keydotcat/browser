@@ -2,32 +2,62 @@
   <form class="text-left">
     <div class="p-1">
       <div class="form-group">
-        <label for="formControlRange">Length: {{genOpts.len}} characters</label>
-        <input type="range" @change="gen()" v-model="genOpts.len" class="form-control-range p-1" min="1" max="40" id="formControlRange">
+        <label for="formControlRange">Length: {{ genOpts.len }} characters</label>
+        <input type="range" @change="gen()" v-model="genOpts.len" class="form-control-range p-1" min="1" max="40" id="formControlRange" />
       </div>
       <div class="form-group">
         <label>Characters</label>
         <div class="d-flex">
           <div class="btn-group pl-1" role="group" aria-label="Enabled characters">
-            <button type="button" class="btn btn-sm btn-outline-info" :class="{active: genOpts.low, disabled:genOpts.unicode}" @click.prevent="gen(genOpts.low=!genOpts.low)">a-z</button>
-            <button type="button" class="btn btn-sm btn-outline-info" :class="{active: genOpts.upp, disabled:genOpts.unicode}" @click.prevent="gen(genOpts.upp=!genOpts.upp)">A-Z</button>
-            <button type="button" class="btn btn-sm btn-outline-info" :class="{active: genOpts.num, disabled:genOpts.unicode}" @click.prevent="gen(genOpts.num=!genOpts.num)">0-9</button>
-            <button type="button" class="btn btn-sm btn-outline-info" :class="{active: genOpts.sym, disabled:genOpts.unicode}" @click.prevent="gen(genOpts.sym=!genOpts.sym)">Symbols</button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-info"
+              :class="{ active: genOpts.low, disabled: genOpts.unicode }"
+              @click.prevent="gen((genOpts.low = !genOpts.low))"
+            >
+              a-z
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-info"
+              :class="{ active: genOpts.upp, disabled: genOpts.unicode }"
+              @click.prevent="gen((genOpts.upp = !genOpts.upp))"
+            >
+              A-Z
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-info"
+              :class="{ active: genOpts.num, disabled: genOpts.unicode }"
+              @click.prevent="gen((genOpts.num = !genOpts.num))"
+            >
+              0-9
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-info"
+              :class="{ active: genOpts.sym, disabled: genOpts.unicode }"
+              @click.prevent="gen((genOpts.sym = !genOpts.sym))"
+            >
+              Symbols
+            </button>
           </div>
-          <button type="button" class="ml-1 btn btn-sm btn-outline-info" :class="{active: genOpts.unicode}" @click.prevent="gen(genOpts.unicode=!genOpts.unicode)">Full unicode</button>
+          <button type="button" class="ml-1 btn btn-sm btn-outline-info" :class="{ active: genOpts.unicode }" @click.prevent="gen((genOpts.unicode = !genOpts.unicode))">
+            Full unicode
+          </button>
         </div>
       </div>
       <div class="form-group">
         <label>Password</label>
         <div class="input-group p-1">
           <div class="input-group-prepend">
-            <span class="input-group-text" @click.prevent="display=!display">
+            <span class="input-group-text" @click.prevent="display = !display">
               <i class="material-icons" v-if="!display">visibility</i>
               <i class="material-icons" v-if="display">visibility_off</i>
             </span>
           </div>
-          <input type="text" v-if="display" class="form-control" v-model="pass">
-          <input type="password" v-if="!display" class="form-control" v-model="pass">
+          <input type="text" v-if="display" class="form-control" v-model="pass" />
+          <input type="password" v-if="!display" class="form-control" v-model="pass" />
         </div>
       </div>
       <div class="p-1 d-flex mb-3">

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'expandHeight':loading}">
+  <div :class="{ expandHeight: loading }">
     <div v-if="loading" class="expandHeight d-flex justify-content-center align-items-center">
       <h1 class="display-4">We're loading!</h1>
     </div>

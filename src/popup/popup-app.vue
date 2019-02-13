@@ -2,10 +2,7 @@
   <div class="top">
     <logged-in v-if="lin" :tab-secrets="secrets" />
     <not-logged-in v-if="lout" :tab-url="url" />
-    <div
-      v-if="checking"
-      class="container loading d-flex justify-content-center align-items-center"
-    >
+    <div v-if="checking" class="container loading d-flex justify-content-center align-items-center">
       <i class="material-icons spinner">
         replay
       </i>
