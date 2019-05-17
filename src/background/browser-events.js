@@ -224,6 +224,11 @@ export default class BrowserEventMgr {
             return { ok: true }
           })
           break
+        case 'refreshContent':
+          this.runtimeRespond(msg, sender, () => {
+            this.store.dispatch('secrets/reload')
+            return { ok: true }
+          })
         case 'popupOpen':
           this.runtimeRespond(msg, sender, () => {
             return this.sendPopupData()

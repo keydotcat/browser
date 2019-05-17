@@ -39,7 +39,22 @@ const config = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        options: {
+          plugins: ['@babel/plugin-proposal-optional-chaining', '@babel/plugin-syntax-dynamic-import'],
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                useBuiltIns: 'usage',
+                targets: {
+                  // https://jamie.build/last-2-versions
+                  browsers: ['> 0.25%', 'not ie 11', 'not op_mini all']
+                }
+              }
+            ]
+          ]
+        }
       },
       {
         test: /\.css$/,
