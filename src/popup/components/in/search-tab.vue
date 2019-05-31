@@ -2,7 +2,7 @@
   <div>
     <div class="p-1">
       <div class="input-group mb-1">
-        <input v-model="searchName" type="text" class="form-control" placeholder="Search" @keyup="doSearch" autofocus />
+        <input v-model="searchName" type="text" class="form-control" placeholder="Search" @keyup="doSearch" ref="searchText" />
         <div class="input-group-append">
           <i class="material-icons input-group-text"> search </i>
         </div>
@@ -28,6 +28,9 @@ export default {
   },
   beforeMount() {
     this.doSearch()
+  },
+  mounted() {
+    this.$refs.searchText.focus()
   },
   methods: {
     doSearch() {
