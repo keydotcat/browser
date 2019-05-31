@@ -58,6 +58,11 @@
           </div>
           <input type="text" v-if="display" class="form-control" v-model="pass" />
           <input type="password" v-if="!display" class="form-control" v-model="pass" />
+          <div class="input-group-append">
+            <copy-button class="input-group-text" :copy="pass">
+              <i class="material-icons">file_copy</i>
+            </copy-button>
+          </div>
         </div>
       </div>
       <div class="p-1 d-flex mb-3">
@@ -79,6 +84,7 @@
 <script>
 import jsspg from 'javascript-strong-password-generator'
 import tabData from '@/popup/tab-data'
+import CopyButton from './copy-button'
 
 function getRandomArray(len) {
   const crypto = window.crypto || window.msCrypto
@@ -125,6 +131,7 @@ function generateNormalPass(opts) {
 
 export default {
   name: 'generator-tab',
+  components: { CopyButton },
   data() {
     return {
       pass: '',
