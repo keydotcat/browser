@@ -80,6 +80,9 @@ export default class BrowserEventMgr {
       case 'bgChangePasswordYes':
         this.changePassword(sender.tab)
         break
+      case 'bgChangePasswordIgnore':
+        this.ignorePasswordChange(sender.tab)
+        break
     }
   }
 
@@ -100,6 +103,12 @@ export default class BrowserEventMgr {
         })
       })
     })
+    BrowserApi.tabSendMessageData(tab, 'closeNotificationBar')
+  }
+
+  ignorePasswordChange(tab) {
+    //TODO
+    this.nots.removeTab(sender.tab)
     BrowserApi.tabSendMessageData(tab, 'closeNotificationBar')
   }
 
@@ -141,8 +150,23 @@ export default class BrowserEventMgr {
       .filter(secret => {
         return secret.data.creds.length > 0
       })
+    console.log('USERMAPTV', usermatch, secrets)
     this.nots.removeTab(tab)
     if (usermatch.length > 0) {
+      var passmatch = usermatch
+        .map(secret => {
+          secret.data.creds = secret.data.creds.filter(cred => {
+            return cred.password == login.password
+          })
+          return secret
+        })
+        .filter(secret => {
+          return secret.data.creds.length > 0
+        })
+      if (passmatch.length > 0) {
+        //If a credential + pass matches do not request a change
+        return
+      }
       var passdif = usermatch
         .map(secret => {
           secret.data.creds = secret.data.creds.filter(cred => {
