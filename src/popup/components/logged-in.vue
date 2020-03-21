@@ -80,7 +80,7 @@ export default {
 
 <style scoped>
 .main {
-  width: 450px;
+  width: 475px;
   height: 500px;
 }
 
